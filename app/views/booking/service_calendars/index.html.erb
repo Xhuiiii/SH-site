@@ -1,0 +1,57 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Service Calendars</h1>
+
+<div id="calendar"></div>
+<script type="text/javascript">
+  // var calendar = $('#calendar').calendar(
+  //   {
+  //       events_source: function () { return []; },
+  //       tmpl_path: "tmpls/"
+  //   });  
+  var calendar = $('#calendar').calendar({
+  tmpl_path: '/tmpls/',
+  events_source: [
+        {
+            "id": 1,
+            "title": "Calendar 1",
+            "url": "http://example.com",
+            "class": "event-important",
+            "start": 1463553900000, // Milliseconds
+            "end": 1463561100000 // Milliseconds
+        },
+
+    ]
+});       
+</script>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Service type id</th>
+      <th>Availability</th>
+      <th>Reservation</th>
+      <th>Rate</th>
+      <th>Date</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @service_calendars.each do |service_calendar| %>
+      <tr>
+        <td><%= service_calendar.service_type_ID %></td>
+        <td><%= service_calendar.availability %></td>
+        <td><%= service_calendar.reservation %></td>
+        <td><%= service_calendar.rate %></td>
+        <td><%= service_calendar.date %></td>
+        <td><%= link_to 'Show', service_calendar %></td>
+        <td><%= link_to 'Edit', edit_service_calendar_path(service_calendar) %></td>
+        <td><%= link_to 'Destroy', service_calendar, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+

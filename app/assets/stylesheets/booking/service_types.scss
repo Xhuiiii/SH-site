@@ -1,0 +1,22 @@
+/*
+  Place all the styles related to the matching controller here.
+  They will automatically be included in application.css.
+*/
+
+.service-col{
+	width: 30%;
+}
+
+.occupancy-col,
+.price-col, 
+.availability-col{
+	width: 10%;
+}
+
+.available-period-col{
+	width: 15%;
+}
+
+.add-service{
+	font-size: 2rem;
+}

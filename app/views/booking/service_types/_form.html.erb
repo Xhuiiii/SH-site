@@ -1,0 +1,49 @@
+<%= form_for(@service_type) do |f| %>
+  <% if @service_type.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@service_type.errors.count, "error") %> prohibited this service_type from being saved:</h2>
+
+      <ul>
+      <% @service_type.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :service_description %><br>
+    <%= f.text_field :service_description %>
+  </div>
+  <div class="field">
+    <%= f.label :max_occupancy %><br>
+    <%= f.number_field :max_occupancy %>
+  </div>
+  <div class="field">
+    <%= f.label :default_price %><br>
+    <%= f.number_field :default_price, :step => 'any' %>
+  </div>
+  <div class="field">
+    <%= f.label :available_from %><br>
+    <%= f.date_field :available_from %>
+  </div>
+  <div class="field">
+    <%= f.label :available_to %><br>
+    <%= f.date_field :available_to %>
+  </div>
+  <div class="field">
+    <%= f.label :price_for_given_dates %><br>
+    <%= f.number_field :price, :step => 'any' %>
+  </div>
+  <div class="field">
+    <%= f.label :availability %><br>
+    <%= f.number_field :availability %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

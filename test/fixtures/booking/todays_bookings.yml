@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  date: 2016-07-23
+  service_type_ID: 
+  reservation_ID: 
+  customer_ID: 
+  rate: 1.5
+
+two:
+  date: 2016-07-23
+  service_type_ID: 
+  reservation_ID: 
+  customer_ID: 
+  rate: 1.5

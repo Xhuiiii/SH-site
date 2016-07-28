@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @todays_booking.date %>
+</p>
+
+<p>
+  <strong>Service type id:</strong>
+  <%= @todays_booking.service_type_ID %>
+</p>
+
+<p>
+  <strong>Reservation id:</strong>
+  <%= @todays_booking.reservation_ID %>
+</p>
+
+<p>
+  <strong>Customer id:</strong>
+  <%= @todays_booking.customer_ID %>
+</p>
+
+<p>
+  <strong>Rate:</strong>
+  <%= @todays_booking.rate %>
+</p>
+
+<%= link_to 'Edit', edit_todays_booking_path(@todays_booking) %> |
+<%= link_to 'Back', todays_bookings_path %>

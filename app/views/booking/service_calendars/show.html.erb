@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Service type id:</strong>
+  <%= @service_calendar.service_type_ID %>
+</p>
+
+<p>
+  <strong>Availability:</strong>
+  <%= @service_calendar.availability %>
+</p>
+
+<p>
+  <strong>Reservations:</strong>
+  <%= @service_calendar.reservation %>
+</p>
+
+<p>
+  <strong>Rate:</strong>
+  <%= @service_calendar.rate %>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @service_calendar.date %>
+</p>
+
+<%= link_to 'Edit', edit_service_calendar_path(@service_calendar) %> |
+<%= link_to 'Back', service_calendars_path %>

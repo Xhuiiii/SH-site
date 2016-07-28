@@ -1,0 +1,22 @@
+{
+  "name": "booking",
+  "version": "1.0.0",
+  "description": "Rails Booking engine",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Xhuiiii/booking.git"
+  },
+  "author": "Robyn JH Liu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Xhuiiii/booking/issues"
+  },
+  "homepage": "https://github.com/Xhuiiii/booking#readme"
+}

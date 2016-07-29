@@ -4,14 +4,10 @@
 
 <div id="calendar"></div>
 <script type="text/javascript">
-  // var calendar = $('#calendar').calendar(
-  //   {
-  //       events_source: function () { return []; },
-  //       tmpl_path: "tmpls/"
-  //   });  
   var calendar = $('#calendar').calendar({
-  tmpl_path: '/tmpls/',
-  events_source: [
+    tmpl_path: 'public/tmpls/',
+    events_source: function(){ 
+      return[
         {
             "id": 1,
             "title": "Calendar 1",
@@ -20,8 +16,8 @@
             "start": 1463553900000, // Milliseconds
             "end": 1463561100000 // Milliseconds
         },
-
-    ]
+      ]
+    }
 });       
 </script>
 

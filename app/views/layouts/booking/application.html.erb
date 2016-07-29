@@ -6,8 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <%= stylesheet_link_tag    "booking/application", media: "all" %>
   <%= javascript_include_tag "booking/application" %>
-  
   <%= csrf_meta_tags %>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="../assets/calendar-css/calendar.min.css">
 </head>
 <body>
 	<div class="container">
@@ -33,6 +34,9 @@
 			</div>
 		<% end %>
 		<%= yield %>
-	</div>        
+	</div>  
+	<script type="text/javascript" src="../assets/calendar-scripts/underscore-min.js"></script>
+	<script type="text/javascript" src="../assets/calendar-scripts/calendar.js"></script>
+	<script type="text/javascript" src="../assets/calendar-scripts/moment.js"></script>     
 </body>
 </html>

@@ -4,7 +4,6 @@ Booking::Engine.routes.draw do
   resources :reservations
   resources :service_calendars, except: [:new]
   resources :service_types
-  resources :tmpls
 
   root to: "service_types#index"
 

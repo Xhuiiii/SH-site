@@ -3,7 +3,6 @@ require_dependency "booking/application_controller"
 module Booking
   class CustomersController < ApplicationController
     before_action :set_customer, only: [:show, :edit, :update, :destroy]
-    has_many :reservations
 
     # GET /customers
     def index
@@ -16,7 +15,7 @@ module Booking
 
     # GET /customers/new
     def new
-      @customer = Customer.new
+      @customer = Customer.new(title: 5)
     end
 
     # GET /customers/1/edit

@@ -3,7 +3,6 @@ require_dependency "booking/application_controller"
 module Booking
   class ReservationsController < ApplicationController
     before_action :set_reservation, only: [:show, :edit, :update, :destroy]
-    has_many :service_types, :customers
 
     # GET /reservations
     def index
@@ -12,17 +11,23 @@ module Booking
 
     # GET /reservations/1
     def show
-      
+ 
     end
 
     # GET /reservations/new
     def new
+      @serviceTypes = ServiceType.all
+      # If a service was passed in 
+      if params[:service_type_id]
+        @serviceSelected = ServiceType.find(params[:service_type_id])
+      end
       @reservation = Reservation.new
     end
 
     # GET /reservations/1/edit
     def edit
-      
+      @serviceTypes = ServiceType.all
+      selectedServiceTypes = @reservation.service_ID
     end
 
     # POST /reservations
@@ -59,7 +64,7 @@ module Booking
 
       # Only allow a trusted parameter "white list" through.
       def reservation_params
-        params.require(:reservation).permit(:reservation_ID, :total_price, :occupancy, :check_in, :check_out, :date, :customer_ID)
+        params.require(:reservation).permit(:total_price, :occupancy, :check_in, :check_out, :date, :customer_ID, service_type_ids:[])
       end
   end
 end

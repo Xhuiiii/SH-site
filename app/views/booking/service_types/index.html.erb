@@ -20,10 +20,11 @@
     <% @service_types.each do |service_type| %>
       <tr>
         <td><%= service_type.name %><br><%= service_type.service_description %></td>
-        <td><%= service_type.max_occupancy %></td>
+        <td><%= service_type.max_occupancy %></td> 
         <td><%= service_type.price %></td>
         <td><%= service_type.availability %></td>
         <td><%= service_type.available_from %> - <%= service_type.available_to %></td>
+        <td><%= link_to 'Book', new_reservation_path(service_type_id: service_type.id) %></td>
         <td><%= link_to 'Show', service_type %></td>
         <td><%= link_to 'Edit', edit_service_type_path(service_type) %></td>
         <td><%= link_to 'Destroy', service_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>

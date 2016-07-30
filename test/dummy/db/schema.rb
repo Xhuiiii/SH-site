@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160728021117) do
+ActiveRecord::Schema.define(version: 20160730144350) do
 
   create_table "booking_customers", force: :cascade do |t|
     t.string   "title"
@@ -28,8 +28,12 @@ ActiveRecord::Schema.define(version: 20160728021117) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "booking_customers_reservations", id: false, force: :cascade do |t|
+    t.integer "booking_reservation_id", null: false
+    t.integer "booking_customer_id",    null: false
+  end
+
   create_table "booking_reservations", force: :cascade do |t|
-    t.integer  "reservation_ID"
     t.float    "total_price"
     t.integer  "occupancy"
     t.date     "check_in"
@@ -37,8 +41,14 @@ ActiveRecord::Schema.define(version: 20160728021117) do
     t.date     "date"
     t.integer  "customer_ID"
     t.integer  "service_ID"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.time     "time"
+  end
+
+  create_table "booking_reservations_service_types", id: false, force: :cascade do |t|
+    t.integer "booking_reservation_id",  null: false
+    t.integer "booking_service_type_id", null: false
   end
 
   create_table "booking_service_calendars", force: :cascade do |t|
@@ -58,7 +68,6 @@ ActiveRecord::Schema.define(version: 20160728021117) do
     t.integer  "availability"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
-    t.integer  "service_type_ID"
     t.text     "service_description"
     t.date     "available_from"
     t.date     "available_to"

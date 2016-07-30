@@ -6,12 +6,69 @@ module Booking
 
     # GET /service_types
     def index
-      @service_types = ServiceType.all
+      #Check for date valid services
+      @service_types = []
+      all_service_types = ServiceType.all  
+      all_service_types.each do |service_type|
+        #if there is a start date
+        if(service_type.available_from)
+          if (service_type.available_from < Date.today)
+            from_valid = true
+          else
+            to_valid = false
+          end
+        else
+          from_valid = true
+        end
+        # if there is an end date
+        if(service_type.available_to)
+          if(service_type.available_to > Date.today)
+            to_valid = true
+          else
+            to_valid = false
+          end
+        else
+          to_valid = true
+        end
+
+        #if valid or default price (non special price)
+        if (from_valid && to_valid)
+          @service_types << service_type   
+        elsif service_type.default_price
+          service_type.price = service_type.default_price
+          @service_types << service_type
+        end
+      end
     end
 
     # GET /service_types/1
     def show
       @service_type = ServiceType.find(params[:id])
+              #if there is a start date
+        if(@service_type.available_from)
+          if (@service_type.available_from < Date.today)
+            from_valid = true
+          else
+            to_valid = false
+          end
+        else
+          from_valid = true
+        end
+        # if there is an end date
+        if(@service_type.available_to)
+          if(@service_type.available_to > Date.today)
+            to_valid = true
+          else
+            to_valid = false
+          end
+        else
+          to_valid = true
+        end
+
+        #if not valid and there's a default price
+        if (!from_valid || !to_valid) && @service_type.default_price
+          @service_type.price = @service_type.default_price
+        end
     end
 
     # GET /service_types/new
@@ -28,7 +85,8 @@ module Booking
     def create
       @service_type = ServiceType.new(service_type_params)
 
-      if !@service_type.price
+      # If there is no special, use default
+      if @service_type.price == nil
         @service_type.price = @service_type.default_price
       end
 

@@ -12,17 +12,15 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :reservation_ID %><br>
-    <%= f.text_field :reservation_ID %>
+    <%= f.label :services %><br>
+    <%= f.collection_check_boxes :service_type_ids, Booking::ServiceType.all, :id, :name do |b| %>
+      <div class="collection-check-box">
+        <%= b.check_box %>
+        <%= b.label %>
+      </div>
+    <% end %>
   </div>
-  <div class="field">
-    <%= f.label :total_price %><br>
-    <%= f.number_field :total_price, :step => 'any' %>
-  </div>
-  <div class="field">
-    <%= f.label :occupancy %><br>
-    <%= f.text_field :occupancy %>
-  </div>
+
   <div class="field">
     <%= f.label :check_in %><br>
     <%= f.date_select :check_in %>
@@ -31,13 +29,18 @@
     <%= f.label :check_out %><br>
     <%= f.date_select :check_out %>
   </div>
+
   <div class="field">
     <%= f.label :date %><br>
     <%= f.date_select :date %>
   </div>
   <div class="field">
-    <%= f.label :customer_ID %><br>
-    <%= f.text_field :customer_ID %>
+    <%= f.label :time %><br>
+    <%= f.time_select :time %>
+  </div>
+  <div class="field">
+    <%= f.label :persons %><br>
+    <%= f.number_field :occupancy %>
   </div>
   <div class="actions">
     <%= f.submit %>

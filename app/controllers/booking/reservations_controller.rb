@@ -31,7 +31,7 @@ module Booking
       setReservationPrice(@reservation)
 
       if @reservation.save
-        redirect_to @reservation, notice: 'Reservation was successfully created.'
+        redirect_to new_customer_path(reservation_id: @reservation.id), notice: 'Reservation was successfully created.'
       else
         render :new
       end

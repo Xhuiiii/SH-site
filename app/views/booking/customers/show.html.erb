@@ -16,6 +16,7 @@
         Checkout: <%= reservation.check_out %>
       <% end %>
     <% end %>
+    <%= link_to 'Edit reservation', edit_reservation_path(reservation) %>
   <% end %>
 </p>
 
@@ -69,6 +70,6 @@
   <%= @customer.country %>
 </p>
 
-<%= link_to 'Edit', edit_customer_path(@customer) %> |
+<%= link_to 'Edit customer info', edit_customer_path(@customer) %> |
 <%= link_to 'Back', customers_path %> |
 <%= link_to 'Book', new_reservation_path %>

@@ -13,7 +13,7 @@
 
   <div class="field">
     <%= f.label :services %><br>
-    <%= f.collection_check_boxes :service_type_ids, Booking::ServiceType.all, :id, :name do |b| %>
+    <%= f.collection_check_boxes :service_type_ids, Booking::ServiceType.all, :id, :name, checked: params[:service_type_id] do |b| %>
       <div class="collection-check-box">
         <%= b.check_box %>
         <%= b.label %>

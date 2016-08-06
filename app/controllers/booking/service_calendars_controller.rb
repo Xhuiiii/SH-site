@@ -7,6 +7,7 @@ module Booking
     # GET /service_calendars
     def index
       @service_calendars = ServiceCalendar.all
+      @service_type_reservations = ServiceTypeReservation.all
     end
 
     # GET /service_calendars/1

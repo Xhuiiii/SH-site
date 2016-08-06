@@ -11,11 +11,15 @@ module Booking
 
     # GET /customers/1
     def show
+      @reservations = @customer.reservations.all
+      #@customer = Customer.includes(:reservations).find(params[:id])
     end
 
     # GET /customers/new
     def new
-      @customer = Customer.new(title: 5)
+      @reservation = Reservation.find(params[:reservation_id])
+      @customer = Customer.new(title: 1)
+      @reservation.customer = @customer
     end
 
     # GET /customers/1/edit
@@ -25,7 +29,6 @@ module Booking
     # POST /customers
     def create
       @customer = Customer.new(customer_params)
-
       if @customer.save
         redirect_to @customer, notice: 'Customer was successfully created.'
       else
@@ -56,7 +59,7 @@ module Booking
 
       # Only allow a trusted parameter "white list" through.
       def customer_params
-        params.require(:customer).permit(:title, :first_name, :last_name, :email, :phone, :address, :city, :state, :zip, :country)
+        params.require(:customer).permit(:title, :first_name, :last_name, :email, :phone, :address, :city, :state, :zip, :country, :reservation_ids => [])
       end
   end
 end

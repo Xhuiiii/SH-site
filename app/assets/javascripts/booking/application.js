@@ -15,6 +15,8 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require bootstrap
-//= require calendar-scripts/underscore-min.js
-//= require calendar-scripts/calendar.js
-//= require calendar-scripts/moment.js
+//= require moment
+//= require fullcalendar
+
+
+

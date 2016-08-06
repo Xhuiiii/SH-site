@@ -1,33 +1,18 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Service Calendar</h1>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <link rel="stylesheet" href="../assets/calendar-css/calendar.min.css">
 
-<div id="calendar"></div>
-
-  <script type="text/javascript" src="../assets/calendar-scripts/underscore-min.js"></script>
-  <script type="text/javascript" src="../assets/calendar-scripts/calendar.js"></script>
-  <script type="text/javascript" src="../assets/calendar-scripts/moment.js"></script> 
-
-<script type="text/javascript">
-  var calendar = $('#calendar').calendar({
-    tmpl_path: '/tmpls/',
-    events_source: []
-    // events_source: function(){ 
-    //   return[
-    //     {
-    //         "id": 1,
-    //         "title": "Calendar 1",
-    //         "url": "http://example.com",
-    //         "class": "event-important",
-    //         "start": 1463553900000, // Milliseconds
-    //         "end": 1463561100000 // Milliseconds
-    //     },
-    //   ]
-    // }
-});       
-</script>
+<div id='calendar'>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      // page is now ready, initialize the calendar...
+      $('#calendar').fullCalendar({
+          // put your options and callbacks here
+          events: './service_calendars.json'
+      });
+    });
+  </script>
+</div>
 
 <table class="table table-hover">
   <thead>

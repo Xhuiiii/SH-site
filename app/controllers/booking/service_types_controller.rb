@@ -10,65 +10,14 @@ module Booking
       @service_types = []
       all_service_types = ServiceType.all  
       all_service_types.each do |service_type|
-        #if there is a start date
-        if(service_type.available_from)
-          if (service_type.available_from < Date.today)
-            from_valid = true
-          else
-            to_valid = false
-          end
-        else
-          from_valid = true
-        end
-        # if there is an end date
-        if(service_type.available_to)
-          if(service_type.available_to > Date.today)
-            to_valid = true
-          else
-            to_valid = false
-          end
-        else
-          to_valid = true
-        end
-
-        #if valid or default price (non special price)
-        if (from_valid && to_valid)
-          @service_types << service_type   
-        elsif service_type.default_price
-          service_type.price = service_type.default_price
-          @service_types << service_type
-        end
+        showPrice(service_type)
       end
     end
 
     # GET /service_types/1
     def show
       @service_type = ServiceType.find(params[:id])
-              #if there is a start date
-        if(@service_type.available_from)
-          if (@service_type.available_from < Date.today)
-            from_valid = true
-          else
-            to_valid = false
-          end
-        else
-          from_valid = true
-        end
-        # if there is an end date
-        if(@service_type.available_to)
-          if(@service_type.available_to > Date.today)
-            to_valid = true
-          else
-            to_valid = false
-          end
-        else
-          to_valid = true
-        end
-
-        #if not valid and there's a default price
-        if (!from_valid || !to_valid) && @service_type.default_price
-          @service_type.price = @service_type.default_price
-        end
+      setPrice(@service_type)
     end
 
     # GET /service_types/new
@@ -84,11 +33,7 @@ module Booking
     # POST /service_types
     def create
       @service_type = ServiceType.new(service_type_params)
-
-      # If there is no special, use default
-      if @service_type.price == nil
-        @service_type.price = @service_type.default_price
-      end
+      setPrice(@service_type)
 
       if @service_type.save
         redirect_to @service_type, notice: 'Service type was successfully created.'
@@ -99,6 +44,7 @@ module Booking
 
     # PATCH/PUT /service_types/1
     def update
+      setPrice(@service_type)
       if @service_type.update(service_type_params)
         redirect_to @service_type, notice: 'Service type was successfully updated.'
       else
@@ -120,7 +66,69 @@ module Booking
 
       # Only allow a trusted parameter "white list" through.
       def service_type_params
-        params.require(:service_type).permit(:name, :max_occupancy, :price, :availability, :service_description, :default_price, :available_from, :available_to)
+        params.require(:service_type).permit(:name, :max_occupancy, :special_price, :price, :availability, :description, :default_price, :available_from, :available_to)
       end
+
+      #Set prices of all types based on dates
+      def showPrice(type)
+      #if there is a start date
+        if(type.available_from)
+          if (type.available_from <= Date.today)
+            from_valid = true
+          else
+            to_valid = false
+          end
+        else
+          from_valid = true
+        end
+
+        # if there is an end date
+        if(type.available_to)
+          if(type.available_to >= Date.today)
+            to_valid = true
+          else
+            to_valid = false
+          end
+        else
+          to_valid = true
+        end
+
+        #if valid and there's a special price
+        if (from_valid && to_valid && type.special_price) 
+          type.price = type.special_price
+          @service_types << type 
+          #if there's no special  
+        elsif type.default_price
+          type.price = type.default_price
+          @service_types << type
+        end
+      end
+
+      def setPrice(service)
+        #set special to not valid
+        from_valid = false
+        to_valid = false
+
+        #if there is a valid start date
+        if(service.available_from)
+          if (service.available_from <= Date.today)
+            from_valid = true
+          end
+        end
+
+        # if there is a valid end date
+        if(service.available_to)
+          if(service.available_to >= Date.today)
+            to_valid = true
+          end
+        end
+
+        #if not valid and there's a default price
+        if (( !from_valid || !to_valid ) && service.default_price) || !service.special_price
+          service.price = service.default_price
+        elsif (from_valid || to_valid) && service.special_price
+            service.price = service.special_price
+        end
+    end
   end
 end

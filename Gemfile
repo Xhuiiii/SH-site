@@ -12,6 +12,9 @@ gem 'jquery-rails'
 #Turbolinks makes following links in the web app faster
 gem 'turbolinks'
 gem 'bootstrap-sass'
+gem 'momentjs-rails'
+gem 'fullcalendar-rails'
+gem 'jbuilder'
 # Declare any dependencies that are still in development here instead of in
 # your gemspec. These might include edge Rails or gems from your path or
 # Git. Remember to move these dependencies to your gemspec before releasing

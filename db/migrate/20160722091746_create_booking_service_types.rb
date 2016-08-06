@@ -5,6 +5,10 @@ class CreateBookingServiceTypes < ActiveRecord::Migration
       t.integer :max_occupancy
       t.float :price
       t.integer :availability
+      t.text :description
+      t.date :available_from
+      t.date :available_to
+      t.float :default_price
 
       t.timestamps null: false
     end

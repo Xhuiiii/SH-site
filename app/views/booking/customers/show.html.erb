@@ -1,5 +1,24 @@
 <p id="notice"><%= notice %></p>
 
+<p class="pull-right">
+  <strong>Reservations</strong><br>
+  <% @reservations.each do |reservation| %>
+    <% reservation.service_types.each do |service| %>
+      <%= service.name %><br>
+    <% end %>
+    <% if reservation.date %>
+      Date: <%= reservation.date %><br>
+    <% else %> 
+      <% if reservation.check_in %> 
+        Checkin: <%= reservation.check_in %><br>
+      <% end %>
+      <% if reservation.check_out %>
+        Checkout: <%= reservation.check_out %>
+      <% end %>
+    <% end %>
+  <% end %>
+</p>
+
 <p>
   <strong>Title:</strong>
   <%= @customer.title %>

@@ -8,12 +8,14 @@
 
 <p>
   <strong>Service:</strong>
-  <%= @reservation.service_ID %>
+  <% @reservation.service_types.each do |service| %>
+    <%= service.name %>
+  <% end %>
 </p>
 
 <p>
   <strong>Total price:</strong>
-  <%= @reservation.total_price %>
+  $<%= @reservation.total_price %>
 </p>
 
 <p>
@@ -36,10 +38,11 @@
   <%= @reservation.date %>
 </p>
 
-<p>
-  <strong>Customer id:</strong>
-  <%= @reservation.customer_ID %>
-</p>
+<%= link_to 'Edit Reservation', edit_reservation_path(@reservation) %> |
+<%= link_to 'Add Customer info', new_customer_path(reservation_id: @reservation.id) %><br>
+<% if @hasCustomer %>
+  <%= @reservation.customer.first_name%>
+  <%= @reservation.customer.last_name %>
+  <%= link_to 'Edit Customer info', edit_customer_path(@reservation.customer) %>
+<% end %>
 
-<%= link_to 'Edit', edit_reservation_path(@reservation) %> |
-<%= link_to 'Back', reservations_path %>

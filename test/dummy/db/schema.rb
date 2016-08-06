@@ -11,7 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160730144350) do
+ActiveRecord::Schema.define(version: 20160804163651) do
+
+  create_table "booking_customer_reservations", force: :cascade do |t|
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.integer  "customer_id"
+    t.integer  "reservation_id"
+  end
 
   create_table "booking_customers", force: :cascade do |t|
     t.string   "title"
@@ -28,27 +35,15 @@ ActiveRecord::Schema.define(version: 20160730144350) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "booking_customers_reservations", id: false, force: :cascade do |t|
-    t.integer "booking_reservation_id", null: false
-    t.integer "booking_customer_id",    null: false
-  end
-
   create_table "booking_reservations", force: :cascade do |t|
     t.float    "total_price"
     t.integer  "occupancy"
     t.date     "check_in"
     t.date     "check_out"
     t.date     "date"
-    t.integer  "customer_ID"
-    t.integer  "service_ID"
+    t.time     "time"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.time     "time"
-  end
-
-  create_table "booking_reservations_service_types", id: false, force: :cascade do |t|
-    t.integer "booking_reservation_id",  null: false
-    t.integer "booking_service_type_id", null: false
   end
 
   create_table "booking_service_calendars", force: :cascade do |t|
@@ -61,17 +56,25 @@ ActiveRecord::Schema.define(version: 20160730144350) do
     t.datetime "updated_at",      null: false
   end
 
+  create_table "booking_service_type_reservations", force: :cascade do |t|
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "service_type_id"
+    t.integer  "reservation_id"
+  end
+
   create_table "booking_service_types", force: :cascade do |t|
     t.string   "name"
     t.integer  "max_occupancy"
     t.float    "price"
     t.integer  "availability"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
-    t.text     "service_description"
+    t.text     "description"
     t.date     "available_from"
     t.date     "available_to"
     t.float    "default_price"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.integer  "special_price"
   end
 
   create_table "booking_todays_bookings", force: :cascade do |t|

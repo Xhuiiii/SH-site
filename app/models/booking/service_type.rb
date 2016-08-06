@@ -1,6 +1,9 @@
 module Booking
   class ServiceType < ActiveRecord::Base
-  	has_and_belongs_to_many :reservations
-  	has_many :customers, through: :reservations
+  	has_many :service_type_reservations
+  	has_many :reservations, through: :service_type_reservations, dependent: :destroy
+
+  	validates :name, :length => {:minimum => 1}
+  	validates_presence_of :default_price
   end
 end

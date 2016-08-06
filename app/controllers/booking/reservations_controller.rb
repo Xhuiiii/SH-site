@@ -11,28 +11,24 @@ module Booking
 
     # GET /reservations/1
     def show
- 
+      @reservation = Reservation.includes(:service_types).find(params[:id])
+      @hasCustomer = @reservation.customer != nil
     end
 
     # GET /reservations/new
     def new
-      @serviceTypes = ServiceType.all
-      # If a service was passed in 
-      if params[:service_type_id]
-        @serviceSelected = ServiceType.find(params[:service_type_id])
-      end
       @reservation = Reservation.new
     end
 
     # GET /reservations/1/edit
     def edit
       @serviceTypes = ServiceType.all
-      selectedServiceTypes = @reservation.service_ID
     end
 
     # POST /reservations
     def create
       @reservation = Reservation.new(reservation_params)
+      setReservationPrice(@reservation)
 
       if @reservation.save
         redirect_to @reservation, notice: 'Reservation was successfully created.'
@@ -44,7 +40,10 @@ module Booking
     # PATCH/PUT /reservations/1
     def update
       if @reservation.update(reservation_params)
-        redirect_to @reservation, notice: 'Reservation was successfully updated.'
+        setReservationPrice(@reservation)
+        if @reservation.save
+          redirect_to @reservation, notice: 'Reservation was successfully updated.'
+        end
       else
         render :edit
       end
@@ -52,8 +51,11 @@ module Booking
 
     # DELETE /reservations/1
     def destroy
-      @reservation.destroy
-      redirect_to reservations_url, notice: 'Reservation was successfully destroyed.'
+      @reservation = Reservation.find(params[:id])
+      if @reservation.destroy
+      #@reservation.destroy
+        redirect_to reservations_url, notice: 'Reservation was successfully destroyed.'
+      end
     end
 
     private
@@ -64,7 +66,48 @@ module Booking
 
       # Only allow a trusted parameter "white list" through.
       def reservation_params
-        params.require(:reservation).permit(:total_price, :occupancy, :check_in, :check_out, :date, :customer_ID, service_type_ids:[])
+        params.require(:reservation).permit(:total_price, :occupancy, :check_in, :check_out, :date, :time, :customer_id, :service_type_ids => [])
+      end
+
+      def getPrice(service, date)
+        #set special to not valid
+        from_valid = false
+        to_valid = false
+
+        #if there is a valid start date
+        if(service.available_from)
+          if (service.available_from <= date)
+            from_valid = true
+          end
+        end
+
+        # if there is a valid end date
+        if(service.available_to)
+          if(service.available_to >= date)
+            to_valid = true
+          end
+        end
+
+        #if not valid and there's a default price
+        if (( !from_valid || !to_valid ) && service.default_price) || !service.special_price
+          return service.default_price
+        elsif (from_valid || to_valid) && service.special_price
+          return service.special_price
+        end
+      end
+
+      def setReservationPrice(reservation)
+        reservation.total_price = 0
+
+        start_date = reservation.check_in
+        end_date = reservation.check_out
+
+        (start_date..end_date).each do |day|
+          reservation.service_types.each do |service|
+            reservation.total_price += getPrice(service, day)
+          end
+        end
       end
   end
 end
+

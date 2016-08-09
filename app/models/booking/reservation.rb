@@ -6,7 +6,6 @@ module Booking
   	has_one :customer, through: :customer_reservation, dependent: :destroy
 
   	validates :service_types, :length => {:minimum => 1}
-    validates_presence_of :occupancy
   	validate :end_date_after_start_date?
 
     accepts_nested_attributes_for :service_type_reservations

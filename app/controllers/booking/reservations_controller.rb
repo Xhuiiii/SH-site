@@ -76,8 +76,8 @@ module Booking
       # Only allow a trusted parameter "white list" through.
       def reservation_params
         respond_to do |format|
-          format.html { params.require(:reservation).permit(:id, :updated_at, :created_at, :total_price, :occupancy, :check_in, :check_out, :date, :customer_id, :service_type_ids => [])}
-          format.json { params.permit(:reservation, :id, :updated_at, :created_at, :total_price, :occupancy, :check_in, :check_out, :date, :customer_id, :service_type_ids => []) }
+          format.html { params.require(:reservation).permit(:id, :updated_at, :created_at, :total_price, :occupancy, :check_in, :check_out, :date, :customer_id, :type_id)}
+          format.json { params.permit(:reservation, :id, :updated_at, :created_at, :total_price, :occupancy, :check_in, :check_out, :date, :customer_id, :service_type_id) }
         end
       end
 

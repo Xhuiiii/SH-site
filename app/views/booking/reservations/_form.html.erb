@@ -13,83 +13,76 @@
 
   <div class="field">
     <%= f.label :services %><br>
-    <%= f.collection_check_boxes :service_type_ids, Booking::ServiceType.all, :id, :name, checked: params[:service_type_id] do |b| %>
-      <div class="collection-check-box">
-        <%= b.check_box %>
+    <%= f.collection_radio_buttons :id, Booking::ServiceType.all, :id, :name, checked: params[:service_type_id] do |b| %>
+      <div class="collection-radio-button" id="<%= Booking::ServiceType.find(b.value).id %>">
+        <%= b.radio_button %>
         <%= b.label %>
-      </div>
-
-      <% if @serviceTypes.find(b.value).multiple_day == true %>
-        <div class="field" id="<%= b.value %>_check_in" style="display:none;">
-          <%= f.label :check_in %><br>
-          <%= f.datetime_select :check_in %>
-        </div>
-        <div class="field" id="<%= b.value %>_check_out" style="display:none;">
-          <%= f.label :check_out %><br>
-          <%= f.datetime_select :check_out %>
-        </div>
-      <% else %>
-        <div class="field" id="<%= b.value %>_sel_date" style="display:none;">
-          <%= f.label :date %><br>
-          <%= f.datetime_select :date %>
-        </div>
-      <% end %>
-
-
-      <div class="field" id="<%= b.value %>_occupancy" style="display:none;">
-        <%= f.label :persons %><br>
-        <%= f.number_field :occupancy %>
       </div>
     <% end %>
   </div>
 
-  <script type="text/javascript">
-    var checkBoxes = [];
+  <div class="field" id="check_in_field" style="display:none;">
+    <%= f.label :check_in %><br>
+    <%= f.datetime_select :check_in %>
+  </div>
+  <div class="field" id="check_out_field" style="display:none;">
+    <%= f.label :check_out %><br>
+    <%= f.datetime_select :check_out %>
+  </div>
+  <div class="field" id="sel_date_field" style="display:none;">
+    <%= f.label :date %><br>
+    <%= f.datetime_select :date %>
+  </div>
+  <div class="field" id="occupancy_field">
+    <%= f.label :persons %><br>
+    <%= f.number_field :occupancy %>
+  </div>
 
-    <% @serviceTypes.each do |service|  %>
-      var checkBox = document.getElementById('reservation_service_type_ids_' + '<%= service.id %>');
-      checkBoxes.push(checkBox);
+
+  <script type="text/javascript">
+    var checkedButton;
+    var radioButtons = [];
+
+    <% @serviceTypes.each do |service| %>
+      var radioButton = document.getElementById('<%= service.id %>');
+      radioButtons.push(radioButton);
     <% end %>
 
-    for(var index in checkBoxes){
+    for(var index in radioButtons){
       (function(){
-        checkBoxes[index].addEventListener("change", onCheckClick.bind(checkBoxes[index], index));
+        radioButtons[index].addEventListener("change", onCheckClick.bind(radioButtons[index], index));
       })();
     }
 
-    function onCheckClick(index, checkBoxClicked){
-      var check_in_field = document.getElementById(checkBoxClicked.target.value + '_check_in');
-      var check_out_field = document.getElementById(checkBoxClicked.target.value + '_check_out');
-      var date_sel_field = document.getElementById(checkBoxClicked.target.value + '_sel_date');
-      var persons_field = document.getElementById(checkBoxClicked.target.value + '_occupancy');
+    function onCheckClick(index, radioButtonClicked){
+      var check_in_field = document.getElementById('check_in_field');
+      var check_out_field = document.getElementById('check_out_field');
+      var date_sel_field = document.getElementById('sel_date_field');
+      var persons_field = document.getElementById('occupancy_field');
 
-      if(checkBoxClicked.target.checked){
-        if (check_in_field){
-          check_in_field.style['display'] = 'block';
+      <% @serviceTypes.each do |service| %>
+        if(radioButtonClicked.target.value == <%= service.id %> && <%= service.multiple_day %>){
+          if (check_in_field){
+            check_in_field.style['display'] = 'block';
+          }
+          if (check_out_field){
+            check_out_field.style['display'] = 'block';
+          }
+          if (date_sel_field){
+            date_sel_field.style['display'] = 'none';
+          }
+        }else if(radioButtonClicked.target.value == <%= service.id %> && <%= !service.multiple_day %>){
+          if (check_in_field){
+            check_in_field.style['display'] = 'none';
+          }
+          if (check_out_field){
+            check_out_field.style['display'] = 'none';
+          }
+          if (date_sel_field){
+            date_sel_field.style['display'] = 'block';
+          }
         }
-        if (check_out_field){
-          check_out_field.style['display'] = 'block';
-        }
-        if (date_sel_field){
-          date_sel_field.style['display'] = 'block';
-        }
-        if(persons_field){
-          persons_field.style['display'] = 'block';
-        }
-      }else if(!checkBoxClicked.target.checked){
-        if (check_in_field){
-          check_in_field.style['display'] = 'none';
-        }
-        if (check_out_field){
-          check_out_field.style['display'] = 'none';
-        }
-        if (date_sel_field){
-          date_sel_field.style['display'] = 'none';
-        }
-        if (persons_field){
-          persons_field.style['display'] = 'none';
-        }
-      }
+      <% end %>
     };
   </script>
 

@@ -9,6 +9,8 @@ module Booking
     validates_presence_of :occupancy
   	validate :end_date_after_start_date?
 
+    accepts_nested_attributes_for :service_type_reservations
+
   	def end_date_after_start_date?
   		if self[:check_out] < self[:check_in]
   			errors[:check_out] << "Must be after check in date"

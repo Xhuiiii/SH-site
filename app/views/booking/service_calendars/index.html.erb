@@ -7,8 +7,37 @@
     $(document).ready(function() {
       // page is now ready, initialize the calendar...
       $('#calendar').fullCalendar({
+          header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'agendaDay,agendaWeek,month'
+                  },
+          defaultView: 'month',
           // put your options and callbacks here
-          events: './service_calendars.json'
+          events: './service_calendars.json',
+          editable: true,
+          eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc){
+            alert(
+              event.title + " was moved to " +
+              event.start.format("dddd, MMMM Do YYYY, h:mm:ss a")
+            );
+
+            if(!confirm("Are you sure about this change?")){
+              revertFunc();
+            }
+            $.ajax({
+              type: "PATCH",
+              dataType: "json",
+              url: "/booking/reservations/" + event.id,
+              data: 
+                {
+                  check_in: new Date(event.start),
+                  check_out: new Date(event.end),
+                  time: new Time(event.time)        
+                }
+            });
+
+          }
       });
     });
   </script>

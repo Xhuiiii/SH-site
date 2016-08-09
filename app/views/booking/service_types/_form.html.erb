@@ -43,6 +43,34 @@
     <%= f.label :availability %><br>
     <%= f.number_field :availability %>
   </div>
+  <div class="field">
+    <%= f.label :multiple_days? %><br>
+    <%= f.check_box :multiple_day %>
+  </div>
+  <div class="field" id="duration">
+    <%= f.label :service_duration %><br>
+    <%= f.number_field :duration %>
+  </div>
+
+  <script type="text/javascript">
+    var checkBox = document.getElementById('service_type_multiple_day');
+    var durationField = document.getElementById('duration');
+    
+    if(checkBox.checked){
+      durationField.style['display'] = 'none';
+    }else{
+      durationField.style['display'] = 'block';
+    }
+
+    checkBox.onchange = function(){
+      if(this.checked){
+        durationField.style['display'] = 'none';
+      }else{
+        durationField.style['display'] = 'block'
+      }
+    }
+  </script>
+
   <div class="actions">
     <%= f.submit %>
   </div>

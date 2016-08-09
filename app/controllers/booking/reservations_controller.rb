@@ -3,6 +3,7 @@ require_dependency "booking/application_controller"
 module Booking
   class ReservationsController < ApplicationController
     before_action :set_reservation, only: [:show, :edit, :update, :destroy]
+    respond_to :html, :json
 
     # GET /reservations
     def index
@@ -17,16 +18,20 @@ module Booking
 
     # GET /reservations/new
     def new
+      @serviceTypes = ServiceType.all
       @reservation = Reservation.new
+      @numberOfServices = @serviceTypes.length
     end
 
     # GET /reservations/1/edit
     def edit
       @serviceTypes = ServiceType.all
+      @numberOfServices = @serviceTypes.length
     end
 
     # POST /reservations
     def create
+      @serviceTypes = ServiceType.all
       @reservation = Reservation.new(reservation_params)
       setReservationPrice(@reservation)
 
@@ -39,14 +44,18 @@ module Booking
 
     # PATCH/PUT /reservations/1
     def update
-      if @reservation.update(reservation_params)
-        setReservationPrice(@reservation)
-        if @reservation.save
-          redirect_to @reservation, notice: 'Reservation was successfully updated.'
+      respond_to do |format|
+        if @reservation.update(reservation_params)
+            setReservationPrice(@reservation)
+              if @reservation.save
+                format.json { redirect_to service_calendars_path }
+                format.html { redirect_to @reservation, notice: 'Reservation was successfully updated.' }
+              end
+        else
+          render :edit
         end
-      else
-        render :edit
       end
+
     end
 
     # DELETE /reservations/1
@@ -66,7 +75,10 @@ module Booking
 
       # Only allow a trusted parameter "white list" through.
       def reservation_params
-        params.require(:reservation).permit(:total_price, :occupancy, :check_in, :check_out, :date, :time, :customer_id, :service_type_ids => [])
+        respond_to do |format|
+          format.html { params.require(:reservation).permit(:id, :updated_at, :created_at, :total_price, :occupancy, :check_in, :check_out, :date, :customer_id, :service_type_ids => [])}
+          format.json { params.permit(:reservation, :id, :updated_at, :created_at, :total_price, :occupancy, :check_in, :check_out, :date, :customer_id, :service_type_ids => []) }
+        end
       end
 
       def getPrice(service, date)
@@ -97,14 +109,27 @@ module Booking
       end
 
       def setReservationPrice(reservation)
+        #Set dates
+        setDates(reservation)
+        #Reset price
         reservation.total_price = 0
 
-        start_date = reservation.check_in
-        end_date = reservation.check_out
+        start_date = reservation.check_in.to_datetime
+        end_date = reservation.check_out.to_datetime
 
         (start_date..end_date).each do |day|
           reservation.service_types.each do |service|
             reservation.total_price += getPrice(service, day)
+          end
+        end
+      end
+
+      def setDates(reservation)
+        reservation.service_types.each do |service|
+          #There is only one date
+          if (!service.multiple_day)
+            reservation.check_in = reservation.date
+            reservation.check_out = reservation.date + service.duration.hours
           end
         end
       end

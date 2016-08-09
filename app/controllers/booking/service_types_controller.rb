@@ -23,18 +23,19 @@ module Booking
     # GET /service_types/new
     def new
       @service_type = ServiceType.new
+      @service_type.service_type_reservations.build(service_type_id: @service_type.id)
     end
 
     # GET /service_types/1/edit
     def edit
-  
+      setDuration(@service_type)
     end
 
     # POST /service_types
     def create
       @service_type = ServiceType.new(service_type_params)
       setPrice(@service_type)
-
+      setDuration(@service_type)
       if @service_type.save
         redirect_to @service_type, notice: 'Service type was successfully created.'
       else
@@ -66,7 +67,7 @@ module Booking
 
       # Only allow a trusted parameter "white list" through.
       def service_type_params
-        params.require(:service_type).permit(:name, :max_occupancy, :special_price, :price, :availability, :description, :default_price, :available_from, :available_to)
+        params.require(:service_type).permit(:name, :max_occupancy, :special_price, :price, :availability, :description, :default_price, :available_from, :available_to, :duration, :multiple_day)
       end
 
       #Set prices of all types based on dates
@@ -129,6 +130,16 @@ module Booking
         elsif (from_valid || to_valid) && service.special_price
             service.price = service.special_price
         end
-    end
+      end
+
+      def setDuration(service)
+        if (!service.multiple_day)
+          if params[:duration] == nil
+            service.duration = 1
+          end
+        else
+          service.duration = nil
+        end
+      end
   end
 end

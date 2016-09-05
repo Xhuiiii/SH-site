@@ -11,8 +11,10 @@ module Booking
 
     # GET /customers/1
     def show
-      @reservations = @customer.reservations.all
-      #@customer = Customer.includes(:reservations).find(params[:id])
+      @reservation = @customer.reservation
+      if @customer.reservation
+        @single_reservations = @customer.reservation.service_type_reservations.all
+      end
     end
 
     # GET /customers/new
@@ -28,8 +30,10 @@ module Booking
 
     # POST /customers
     def create
+      @reservation = Reservation.find(params[:reservation_id])
       @customer = Customer.new(customer_params)
-      if @customer.save
+      @reservation.customer = @customer
+      if @reservation.customer.save
         redirect_to @customer, notice: 'Customer was successfully created.'
       else
         render :new
@@ -50,6 +54,7 @@ module Booking
       @customer.destroy
       redirect_to customers_url, notice: 'Customer was successfully destroyed.'
     end
+    
 
     private
       # Use callbacks to share common setup or constraints between actions.

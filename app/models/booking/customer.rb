@@ -1,6 +1,6 @@
 module Booking
   class Customer < ActiveRecord::Base
-  	has_many :customer_reservations
-  	has_many :reservations, through: :customer_reservations, dependent: :destroy
+  	has_one :customer_reservation
+  	has_one :reservation, through: :customer_reservation, dependent: :destroy
   end
 end

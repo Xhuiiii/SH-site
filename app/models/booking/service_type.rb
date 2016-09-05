@@ -1,6 +1,6 @@
 module Booking
   class ServiceType < ActiveRecord::Base
-  	has_many :service_type_reservations
+  	has_many :service_type_reservations, dependent: :destroy
   	has_many :reservations, through: :service_type_reservations, dependent: :destroy
 
   	validates :name, :length => {:minimum => 1}

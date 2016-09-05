@@ -12,7 +12,7 @@ module Booking
 
     # GET /reservations/1
     def show
-      @reservation = Reservation.includes(:service_types).find(params[:id])
+      @single_reservations = @reservation.service_type_reservations.all
       @hasCustomer = @reservation.customer != nil
     end
 
@@ -20,23 +20,41 @@ module Booking
     def new
       @serviceTypes = ServiceType.all
       @reservation = Reservation.new
+      @reservation.service_type_reservations.build
+      @reservation.build_customer_reservation
       @numberOfServices = @serviceTypes.length
+
+      if params[:customer_id]
+        @cust_id = params[:customer_id]
+      end
+
+      if params[:service_type_id]
+        @selectedService = ServiceType.find(params[:service_type_id])
+      end
+
     end
 
     # GET /reservations/1/edit
     def edit
       @serviceTypes = ServiceType.all
       @numberOfServices = @serviceTypes.length
+      @single_reservation = @reservation.service_type_reservations.find(params[:single_service_reservation_id])
+      @selectedService = ServiceType.find(@single_reservation.service_type_id)
     end
 
     # POST /reservations
     def create
       @serviceTypes = ServiceType.all
       @reservation = Reservation.new(reservation_params)
-      setReservationPrice(@reservation)
+      #@service_type_reservation = @reservation.service_type_reservations.build(reservation_params[:service_type_reservations_attributes])
 
+      #setReservationPrice(@reservation)
       if @reservation.save
-        redirect_to new_customer_path(reservation_id: @reservation.id), notice: 'Reservation was successfully created.'
+        if (!@reservation.customer.present?)
+          redirect_to new_customer_path(reservation_id: @reservation.id), notice: 'Reservation was successfully created.'
+        else
+          redirect_to @reservation.customer
+        end
       else
         render :new
       end
@@ -46,7 +64,7 @@ module Booking
     def update
       respond_to do |format|
         if @reservation.update(reservation_params)
-            setReservationPrice(@reservation)
+            #setReservationPrice(@reservation)
               if @reservation.save
                 format.json { redirect_to service_calendars_path }
                 format.html { redirect_to @reservation, notice: 'Reservation was successfully updated.' }
@@ -76,7 +94,7 @@ module Booking
       # Only allow a trusted parameter "white list" through.
       def reservation_params
         respond_to do |format|
-          format.html { params.require(:reservation).permit(:id, :updated_at, :created_at, :total_price, :occupancy, :check_in, :check_out, :date, :customer_id, :type_id)}
+          format.html { params.require(:reservation).permit(:updated_at, :created_at, :total_price, customer_reservation_attributes: [:customer_id], service_type_reservations_attributes: [:id, :occupancy, :check_in, :check_out, :date, :service_type_id, :_destroy])}
           format.json { params.permit(:reservation, :id, :updated_at, :created_at, :total_price, :occupancy, :check_in, :check_out, :date, :customer_id, :service_type_id) }
         end
       end

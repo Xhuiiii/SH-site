@@ -37,13 +37,9 @@ ActiveRecord::Schema.define(version: 20160808033721) do
 
   create_table "booking_reservations", force: :cascade do |t|
     t.float    "total_price"
-    t.datetime "check_in"
-    t.datetime "check_out"
-    t.datetime "date"
-    t.float    "single_res_price"
-    t.integer  "occupancy"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.integer  "single_service_reservation_id"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
   end
 
   create_table "booking_service_calendars", force: :cascade do |t|
@@ -57,8 +53,13 @@ ActiveRecord::Schema.define(version: 20160808033721) do
   end
 
   create_table "booking_service_type_reservations", force: :cascade do |t|
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "check_in"
+    t.datetime "check_out"
+    t.datetime "date"
+    t.float    "single_res_price"
+    t.integer  "occupancy"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
     t.integer  "service_type_id"
     t.integer  "reservation_id"
   end

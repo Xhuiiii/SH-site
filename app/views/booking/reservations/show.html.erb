@@ -7,38 +7,43 @@
 </p>
 
 <p>
-  <strong>Service:</strong>
-  <% @reservation.service_types.each do |service| %>
-    <%= service.name %>
-  <% end %>
-</p>
-
-<p>
   <strong>Total price:</strong>
   $<%= @reservation.total_price %>
 </p>
 
-<p>
-  <strong>Occupancy:</strong>
-  <%= @reservation.occupancy %>
-</p>
+<% @single_reservations.each do |single_res| %>
+  <p>
+    <strong>Service:</strong>
+    <%= single_res.service_type.name %>
+  </p>
 
-<p>
-  <strong>Check in:</strong>
-  <%= @reservation.check_in %>
-</p>
+  <p>
+    <strong>Price:</strong>
+    <%= single_res.service_type.price %>
+  </p>
 
-<p>
-  <strong>Check out:</strong>
-  <%= @reservation.check_out %>
-</p>
+  <p>
+    <strong>Occupancy:</strong>
+    <%= single_res.occupancy %>
+  </p>
 
-<p>
-  <strong>Date:</strong>
-  <%= @reservation.date %>
-</p>
+  <p>
+    <strong>Check in:</strong>
+    <%= single_res.check_in %>
+  </p>
 
-<%= link_to 'Edit Reservation', edit_reservation_path(@reservation) %> |
+  <p>
+    <strong>Check out:</strong>
+    <%= single_res.check_out %>
+  </p>
+
+  <p>
+    <strong>Date:</strong>
+    <%= single_res.date %>
+  </p>
+  <%= link_to 'Edit Reservation', edit_reservation_path(reservation_id: single_res.reservation_id, single_service_reservation_id: single_res.id) %>
+<% end %> | 
+
 <%= link_to 'Add Customer info', new_customer_path(reservation_id: @reservation.id) %><br>
 <% if @hasCustomer %>
   <%= @reservation.customer.first_name%>

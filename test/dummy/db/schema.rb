@@ -11,7 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160808033721) do
+ActiveRecord::Schema.define(version: 20160907115040) do
+
+  create_table "booking_blocked_days", force: :cascade do |t|
+    t.date    "blocked_from_date"
+    t.date    "blocked_to_date"
+    t.boolean "permanent"
+    t.integer "occurance"
+  end
 
   create_table "booking_customer_reservations", force: :cascade do |t|
     t.datetime "created_at",     null: false

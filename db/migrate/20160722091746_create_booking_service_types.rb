@@ -6,6 +6,7 @@ class CreateBookingServiceTypes < ActiveRecord::Migration
       t.float :price
       t.integer :availability
       t.text :description
+      #special avail from-to
       t.date :available_from
       t.date :available_to
       t.float :default_price

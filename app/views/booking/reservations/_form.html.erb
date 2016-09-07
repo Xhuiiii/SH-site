@@ -18,26 +18,8 @@
   <% end %>
 
   <%= f.fields_for :service_type_reservations do |f| %>
-    <%= render 'service_type_reservation_fields', f: f %>
+    <%= render 'booking/reservations/service_type_reservation_fields', f: f %>
   <% end %>
-
-  <%= link_to_add_fields 'Add service reservation', f, :service_type_reservations %>
-
-  <!-- Find every element with the name attribute set to "new_record" and replace it with a timestamp. Now they won't have the same id -->
-  <script type="text/javascript">
-
-  $('[data-form-prepend]').click( function(e) { 
-    var obj = $( $(this).attr('data-form-prepend') ); 
-    obj.find('input, select, textarea').each( function() { 
-      $(this).attr( 'name', function() { 
-        return $(this).attr('name').replace( 'new_record', (new Date()).getTime() ); 
-      }); 
-    }); 
-    obj.insertBefore( this ); 
-    return false; 
-  });
-
-  </script>
 
   <div class="actions">
     <%= f.submit %>

@@ -1,0 +1,29 @@
+<!-- Give dates to see avail services -->
+<div class="field" id="check_in_field" style="display:none;">
+  <%= f.label :check_in %><br>
+  <%= f.datetime_select :check_in %>
+</div>
+<div class="field" id="check_out_field" style="display:none;">
+  <%= f.label :check_out %><br>
+  <%= f.datetime_select :check_out %>
+</div>
+
+<div class="field">
+  <%= f.label :services %><br>
+  <%= f.collection_radio_buttons :service_type_id, Booking::ServiceType.all, :id, :name, checked: params[:service_type_id] do |b| %>
+    <div class="collection-radio-button" id="<%= Booking::ServiceType.find(b.value).id %>">
+      <%= b.radio_button %>
+      <%= b.label %>
+    </div>
+  <% end %>
+</div>
+
+<div class="field" id="occupancy_field">
+  <%= f.label :persons %><br>
+  <%= f.number_field :occupancy %>
+</div>
+
+<% if f.object.persisted? %>
+  <%= f.check_box :_destroy %>
+  <%= f.label :_destroy, "Destroy" %>
+<% end %>

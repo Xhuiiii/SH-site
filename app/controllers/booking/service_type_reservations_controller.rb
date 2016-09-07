@@ -16,6 +16,15 @@ module Booking
     #   end
     # end
 
+    def new 
+      if :reservation_id
+        @reservation = Reservation.find(params[:reservation_id])
+      else
+        @reservation = Reservation.new
+      end
+      @reservation.service_type_reservations.build
+    end
+
   	def destroy
   		@reservation = Reservation.find(params[:reservation_id])
   		@service_res = @reservation.service_type_reservations.find(params[:id])

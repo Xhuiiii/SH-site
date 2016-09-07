@@ -8,11 +8,15 @@ module Booking
     # GET /reservations
     def index
       @reservations = Reservation.all
+      @reservations.each do |reservation|
+        setReservationPrice(reservation)
+      end
     end
 
     # GET /reservations/1
     def show
       @single_reservations = @reservation.service_type_reservations.all
+      setReservationPrice(@reservation)
       @hasCustomer = @reservation.customer != nil
     end
 
@@ -46,9 +50,7 @@ module Booking
     def create
       @serviceTypes = ServiceType.all
       @reservation = Reservation.new(reservation_params)
-      #@service_type_reservation = @reservation.service_type_reservations.build(reservation_params[:service_type_reservations_attributes])
 
-      #setReservationPrice(@reservation)
       if @reservation.save
         if (!@reservation.customer.present?)
           redirect_to new_customer_path(reservation_id: @reservation.id), notice: 'Reservation was successfully created.'
@@ -64,11 +66,11 @@ module Booking
     def update
       respond_to do |format|
         if @reservation.update(reservation_params)
-            #setReservationPrice(@reservation)
-              if @reservation.save
-                format.json { redirect_to service_calendars_path }
-                format.html { redirect_to @reservation, notice: 'Reservation was successfully updated.' }
-              end
+            setReservationPrice(@reservation)
+            if @reservation.save
+              format.json { redirect_to service_calendars_path }
+              format.html { redirect_to @reservation, notice: 'Reservation was successfully updated.' }
+            end
         else
           render :edit
         end
@@ -132,25 +134,30 @@ module Booking
         #Reset price
         reservation.total_price = 0
 
-        start_date = reservation.check_in.to_datetime
-        end_date = reservation.check_out.to_datetime
+        reservation.service_type_reservations.each do |service_res|
+          service_res.single_res_price = 0
+          start_date = service_res.check_in.to_date
+          end_date = service_res.check_out.to_date
 
-        (start_date..end_date).each do |day|
-          reservation.service_types.each do |service|
-            reservation.total_price += getPrice(service, day)
+          (start_date..end_date).each do |day|
+            reservation.service_types.each do |service|
+              reservation.total_price += getPrice(service, day)
+              service_res.single_res_price += getPrice(service, day)
+            end
           end
         end
       end
 
       def setDates(reservation)
-        reservation.service_types.each do |service|
+        #For each service reservation
+        reservation.service_type_reservations.each do |service_res|
           #There is only one date
-          if (!service.multiple_day)
-            reservation.check_in = reservation.date
-            reservation.check_out = reservation.date + service.duration.hours
+          my_service = ServiceType.find(service_res.service_type_id)
+          if (!my_service.multiple_day)
+            service_res.check_in = service_res.date
+            service_res.check_out = service_res.date + my_service.duration.hours
           end
         end
       end
   end
 end
-

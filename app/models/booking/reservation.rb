@@ -1,12 +1,12 @@
 module Booking
   class Reservation < ActiveRecord::Base
   	has_many :service_type_reservations, dependent: :destroy
-    accepts_nested_attributes_for :service_type_reservations, allow_destroy: true
-    
+    accepts_nested_attributes_for :service_type_reservations, allow_destroy: true  
   	has_many :service_types, through: :service_type_reservations, dependent: :destroy
+
   	has_one :customer_reservation, dependent: :destroy
     accepts_nested_attributes_for :customer_reservation
-  	has_one :customer, through: :customer_reservation, dependent: :destroy
+  	has_one :customer, through: :customer_reservation
 
     #validate :end_date_after_start_date?
 

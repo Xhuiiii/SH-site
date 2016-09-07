@@ -1,3 +1,4 @@
+<!-- Click service, will show times avail -->
 <div class="field">
   <%= f.label :services %><br>
   <%= f.collection_radio_buttons :service_type_id, Booking::ServiceType.all, :id, :name, checked: params[:service_type_id] do |b| %>
@@ -34,9 +35,11 @@
   var checkedButton;
   var radioButtons = [];
 
-  <% @serviceTypes.each do |service| %>
-    var radioButton = document.getElementById('<%= service.id %>');
-    radioButtons.push(radioButton);
+  <% if @serviceTypes %>
+    <% @serviceTypes.each do |service| %>
+      var radioButton = document.getElementById('<%= service.id %>');
+      radioButtons.push(radioButton);
+    <% end %>
   <% end %>
 
   for(var index in radioButtons){
@@ -76,29 +79,30 @@
   <% end %>
 
   function onCheckClick(index, radioButtonClicked){
-
-    <% @serviceTypes.each do |service| %>
-      if(radioButtonClicked.target.value == <%= service.id %> && <%= service.multiple_day %>){
-        if (check_in_field){
-          check_in_field.style['display'] = 'block';
+    <% if @serviceTypes %>
+      <% @serviceTypes.each do |service| %>
+        if(radioButtonClicked.target.value == <%= service.id %> && <%= service.multiple_day %>){
+          if (check_in_field){
+            check_in_field.style['display'] = 'block';
+          }
+          if (check_out_field){
+            check_out_field.style['display'] = 'block';
+          }
+          if (date_sel_field){
+            date_sel_field.style['display'] = 'none';
+          }
+        }else if(radioButtonClicked.target.value == <%= service.id %> && <%= !service.multiple_day %>){
+          if (check_in_field){
+            check_in_field.style['display'] = 'none';
+          }
+          if (check_out_field){
+            check_out_field.style['display'] = 'none';
+          }
+          if (date_sel_field){
+            date_sel_field.style['display'] = 'block';
+          }
         }
-        if (check_out_field){
-          check_out_field.style['display'] = 'block';
-        }
-        if (date_sel_field){
-          date_sel_field.style['display'] = 'none';
-        }
-      }else if(radioButtonClicked.target.value == <%= service.id %> && <%= !service.multiple_day %>){
-        if (check_in_field){
-          check_in_field.style['display'] = 'none';
-        }
-        if (check_out_field){
-          check_out_field.style['display'] = 'none';
-        }
-        if (date_sel_field){
-          date_sel_field.style['display'] = 'block';
-        }
-      }
+      <% end %>
     <% end %>
   };
 </script>

@@ -16,8 +16,14 @@ ActiveRecord::Schema.define(version: 20160907115040) do
   create_table "booking_blocked_days", force: :cascade do |t|
     t.date    "blocked_from_date"
     t.date    "blocked_to_date"
-    t.boolean "permanent"
-    t.integer "occurance"
+    t.boolean "monday"
+    t.boolean "tuesday"
+    t.boolean "wednesday"
+    t.boolean "thursday"
+    t.boolean "friday"
+    t.boolean "saturday"
+    t.boolean "sunday"
+    t.integer "service_type_id"
   end
 
   create_table "booking_customer_reservations", force: :cascade do |t|

@@ -43,14 +43,37 @@
     <%= f.label :availability %><br>
     <%= f.number_field :availability %>
   </div>
-  <div class="field">
-    <%= f.label :multiple_days? %><br>
-    <%= f.check_box :multiple_day %>
-  </div>
   <div class="field" id="duration">
     <%= f.label :service_duration %><br>
     <%= f.number_field :duration %>
   </div>
+
+  <%= f.fields_for :blocked_days do |f| %>
+    <div class="field">
+      <%= f.label :unavailable_from_date %><br>
+      <%= f.date_field :blocked_from_date %>
+    </div>
+    <div class="field">
+      <%= f.label :unavailable_to_date %><br>
+      <%= f.date_field :blocked_to_date %>
+    </div>
+    <div class="field">
+      <%= f.label :monday %><br>
+      <%= f.check_box :monday %><br>
+      <%= f.label :tuesday %><br>
+      <%= f.check_box :tuesday %><br>
+      <%= f.label :wednesday %><br>
+      <%= f.check_box :wednesday %><br>
+      <%= f.label :thursday %><br>
+      <%= f.check_box :thursday %><br>
+      <%= f.label :friday %><br>
+      <%= f.check_box :friday %><br>
+      <%= f.label :saturday %><br>
+      <%= f.check_box :saturday %><br>
+      <%= f.label :sunday %><br>
+      <%= f.check_box :sunday %><br>
+    </div>
+  <% end %>
 
   <script type="text/javascript">
     var checkBox = document.getElementById('service_type_multiple_day');

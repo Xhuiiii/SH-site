@@ -24,6 +24,7 @@ module Booking
     def new
       @service_type = ServiceType.new
       @service_type.service_type_reservations.build(service_type_id: @service_type.id)
+      @service_type.blocked_days.build
     end
 
     # GET /service_types/1/edit
@@ -67,7 +68,7 @@ module Booking
 
       # Only allow a trusted parameter "white list" through.
       def service_type_params
-        params.require(:service_type).permit(:name, :max_occupancy, :special_price, :price, :availability, :description, :default_price, :available_from, :available_to, :duration, :multiple_day)
+        params.require(:service_type).permit(:name, :max_occupancy, :special_price, :price, :availability, :description, :default_price, :available_from, :available_to, :duration, :multiple_day, blocked_days_attributes: [:blocked_from_date, :blocked_to_date, :monday, :tueday, :wednesday, :thursday, :friday, :saturday, :sunday])
       end
 
       #Set prices of all types based on dates

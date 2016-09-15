@@ -35,7 +35,6 @@ module Booking
       if params[:service_type_id]
         @selectedService = ServiceType.find(params[:service_type_id])
       end
-
     end
 
     # GET /reservations/1/edit
@@ -66,11 +65,11 @@ module Booking
     def update
       respond_to do |format|
         if @reservation.update(reservation_params)
-            setReservationPrice(@reservation)
-            if @reservation.save
-              format.json { redirect_to service_calendars_path }
-              format.html { redirect_to @reservation, notice: 'Reservation was successfully updated.' }
-            end
+          setReservationPrice(@reservation)
+          if @reservation.save
+            format.json { redirect_to service_calendars_path }
+            format.html { redirect_to @reservation, notice: 'Reservation was successfully updated.' }
+          end
         else
           render :edit
         end

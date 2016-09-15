@@ -81,25 +81,27 @@
   function onCheckClick(index, radioButtonClicked){
     <% if @serviceTypes %>
       <% @serviceTypes.each do |service| %>
-        if(radioButtonClicked.target.value == <%= service.id %> && <%= service.multiple_day %>){
-          if (check_in_field){
-            check_in_field.style['display'] = 'block';
-          }
-          if (check_out_field){
-            check_out_field.style['display'] = 'block';
-          }
-          if (date_sel_field){
-            date_sel_field.style['display'] = 'none';
-          }
-        }else if(radioButtonClicked.target.value == <%= service.id %> && <%= !service.multiple_day %>){
-          if (check_in_field){
-            check_in_field.style['display'] = 'none';
-          }
-          if (check_out_field){
-            check_out_field.style['display'] = 'none';
-          }
-          if (date_sel_field){
-            date_sel_field.style['display'] = 'block';
+        if(radioButtonClicked.target.value == <%= service.id %>){
+          if <%= service.multiple_day %> {
+            if (check_in_field){
+              check_in_field.style['display'] = 'block';
+            }
+            if (check_out_field){
+              check_out_field.style['display'] = 'block';
+            }
+            if (date_sel_field){
+              date_sel_field.style['display'] = 'none';
+            }
+          }else if <%= !service.multiple_day %>{
+            if (check_in_field){
+              check_in_field.style['display'] = 'none';
+            }
+            if (check_out_field){
+              check_out_field.style['display'] = 'none';
+            }
+            if (date_sel_field){
+              date_sel_field.style['display'] = 'block';
+            }
           }
         }
       <% end %>

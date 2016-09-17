@@ -22,7 +22,7 @@
     <%= single_res.occupancy %>
   </p>
 
-  <% if single_res.service_type.multiple_day %>
+  <% if Booking::Category.find(single_res.service_type.category_id).multiple_day %>
     <p>
       <strong>Check in:</strong>
       <%= single_res.check_in.to_date %>

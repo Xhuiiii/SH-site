@@ -17,8 +17,10 @@
     <% end %>
   <% end %>
 
-  <%= f.fields_for :service_type_reservations do |f| %>
-    <%= render 'booking/reservations/service_type_reservation_fields', f: f %>
+  <% if params[:service_type_id] %>
+    <%= f.fields_for :service_type_reservations do |f| %>
+      <%= render 'booking/reservations/service_type_reservation_fields', f: f %>
+    <% end %>
   <% end %>
 
   <div class="actions">

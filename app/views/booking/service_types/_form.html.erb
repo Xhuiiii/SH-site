@@ -48,6 +48,10 @@
     <%= f.label :availability %><br>
     <%= f.number_field :availability %>
   </div>
+  <div class="field">
+    <%= f.label :adult_child_field? %><br>
+    <%= f.check_box :adult_child_field %>
+  </div>
 
   <%= f.fields_for :blocked_day do |f| %>
     <div class="field">

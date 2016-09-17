@@ -27,3 +27,81 @@
   <%= f.check_box :_destroy %>
   <%= f.label :_destroy, "Destroy" %>
 <% end %>
+
+<script type="text/javascript">
+  var checkedButton;
+  var radioButtons = [];
+
+  <% if @serviceTypes %>
+    <% @serviceTypes.each do |service| %>
+      var radioButton = document.getElementById('<%= service.id %>');
+      radioButtons.push(radioButton);
+    <% end %>
+  <% end %>
+
+  for(var index in radioButtons){
+    (function(){
+      radioButtons[index].addEventListener("change", onCheckClick.bind(radioButtons[index], index));
+    })();
+  }
+
+  var check_in_field = document.getElementById('check_in_field');
+  var check_out_field = document.getElementById('check_out_field');
+  var date_sel_field = document.getElementById('sel_date_field');
+  var persons_field = document.getElementById('occupancy_field');
+
+  //If a service is selected in the beginning
+  <% if @selectedService %>
+    <% if @selectedService.multiple_day %>
+      if (check_in_field){
+        check_in_field.style['display'] = 'block';
+      }
+      if (check_out_field){
+        check_out_field.style['display'] = 'block';
+      }
+      if (date_sel_field){
+        date_sel_field.style['display'] = 'none';
+      }
+    <% elsif !@selectedService.multiple_day %>
+      if (check_in_field){
+        check_in_field.style['display'] = 'none';
+      }
+      if (check_out_field){
+        check_out_field.style['display'] = 'none';
+      }
+      if (date_sel_field){
+        date_sel_field.style['display'] = 'block';
+      }
+    <% end %>
+  <% end %>
+
+  function onCheckClick(index, radioButtonClicked){
+    <% if @serviceTypes %>
+      <% @serviceTypes.each do |service| %>
+        if(radioButtonClicked.target.value == <%= service.id %>){
+          if <%= service.multiple_day %> {
+            if (check_in_field){
+              check_in_field.style['display'] = 'block';
+            }
+            if (check_out_field){
+              check_out_field.style['display'] = 'block';
+            }
+            if (date_sel_field){
+              date_sel_field.style['display'] = 'none';
+            }
+          }else if <%= !service.multiple_day %>{
+            if (check_in_field){
+              check_in_field.style['display'] = 'none';
+            }
+            if (check_out_field){
+              check_out_field.style['display'] = 'none';
+            }
+            if (date_sel_field){
+              date_sel_field.style['display'] = 'block';
+            }
+          }
+        }
+      <% end %>
+    <% end %>
+  };
+</script>

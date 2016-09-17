@@ -33,7 +33,7 @@ module Booking
       end
 
       if params[:service_type_id]
-        @selectedService = ServiceType.find(params[:service_type_id])
+        @selected_service = ServiceType.find(params[:service_type_id])
       end
     end
 
@@ -152,7 +152,8 @@ module Booking
         reservation.service_type_reservations.each do |service_res|
           #There is only one date
           my_service = ServiceType.find(service_res.service_type_id)
-          if (!my_service.multiple_day)
+          my_category = Category.find(my_service.category_id)
+          if (!my_category.multiple_day)
             service_res.check_in = service_res.date
             service_res.check_out = service_res.date + my_service.duration.hours
           end

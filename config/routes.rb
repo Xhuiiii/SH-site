@@ -6,8 +6,12 @@ Booking::Engine.routes.draw do
 	resources :service_type_reservations
   end
   resources :service_calendars, except: [:new]
-  resources :service_types
+  resources :categories
+  resources :categories do
+    resources :service_types, except: :index
+  end
+  resources :service_types, only: :index
 
-  root to: "service_types#index"
+  root to: "categories#index"
 
 end

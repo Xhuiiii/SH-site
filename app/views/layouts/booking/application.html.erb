@@ -11,10 +11,11 @@
 <body>
 	<div class="container">
 		<ul class="nav nav-tabs">
-			<li><%= link_to "My Services", root_path %></li>
+			<li><%= link_to "My Categories", root_path %></li>
 			<li><%= link_to "Calendar", service_calendars_path %></li>
-			<li><%= link_to "Book", reservations_path %></li>
+			<li><%= link_to "Reservations", reservations_path %></li>
 			<li><%= link_to "Customers", customers_path %></li>
+			<li><%= link_to "Book", service_types_path %></li>
 		</ul>
 
 		<% if flash[:notice] %>

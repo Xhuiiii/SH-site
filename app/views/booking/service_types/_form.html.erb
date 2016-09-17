@@ -1,14 +1,19 @@
-<%= form_for(@service_type) do |f| %>
+<%= form_for [@category, @service_type] do |f| %>
   <% if @service_type.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@service_type.errors.count, "error") %> prohibited this service_type from being saved:</h2>
-
       <ul>
-      <% @service_type.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
+        <% @service_type.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
       </ul>
     </div>
+  <% end %>
+
+  <%= f.fields_for :category do |f| %>
+    <% if params[:category_id] %>
+      <%= f.hidden_field :category_id, :value => params[:category_id] %>
+    <% end %>
   <% end %>
 
   <div class="field">
@@ -70,38 +75,14 @@
       <%= f.check_box :sunday %><br>
     </div>
   <% end %>
-  <div class="field" id="multiple_day">
-    <%= f.label :multiple_day? %><br>
-    <%= f.check_box :multiple_day %>
-  </div>
-  <div class="field" id="duration">
-    <%= f.label :service_duration %><br>
-    <%= f.number_field :duration %>
-  </div>
 
-  <script type="text/javascript">
-    var checkBox = document.getElementById('multiple_day');
-    var durationField = document.getElementById('duration');
-    console.log(durationField);
-    (function(){
-      checkBox.addEventListener("change", onCheckClick.bind(checkBox));
-    })();
-
-    function onCheckClick(checkBoxClicked){
-      if(checkBoxClicked.target.checked){
-        durationField.style['display'] = 'none';
-      }else{
-        durationField.style['display'] = 'block';
-      }
-    };
-
-    if(checkBox.checked){
-      durationField.style['display'] = 'none';
-    }else{
-      durationField.style['display'] = 'block';
-    }
-
-  </script>
+  <!-- If category is not multiple day, display duration -->
+  <% if !@category.multiple_day %>
+    <div class="field" id="duration">
+      <%= f.label :service_duration %><br>
+      <%= f.number_field :duration %>
+    </div>
+  <% end %>
 
   <div class="actions">
     <%= f.submit %>

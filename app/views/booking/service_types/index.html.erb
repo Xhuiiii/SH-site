@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <h1>My Services 
-<button class="add-service"><%= link_to 'Add', new_service_type_path %></button> 
+<button class="add-service"><%= link_to 'Add', categories_path %></button> 
 </h1>
 
 <table class="table table-hover">
@@ -25,9 +25,9 @@
         <td><%= service_type.availability %></td>
         <td><%= service_type.available_from %> - <%= service_type.available_to %></td>
         <td><%= link_to 'Book', new_reservation_path(service_type_id: service_type.id) %></td>
-        <td><%= link_to 'Show', service_type %></td>
-        <td><%= link_to 'Edit', edit_service_type_path(service_type) %></td>
-        <td><%= link_to 'Destroy', service_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Show', category_service_type_path(category_id: service_type.category_id, id: service_type.id) %></td>
+        <td><%= link_to 'Edit', edit_category_service_type_path(category_id: service_type.category_id, id: service_type.id) %></td>
+        <td><%= link_to 'Destroy', [Booking::Category.find(service_type.category_id), service_type], method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>

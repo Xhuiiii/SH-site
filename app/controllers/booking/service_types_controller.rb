@@ -22,23 +22,25 @@ module Booking
 
     # GET /service_types/new
     def new
-      @service_type = ServiceType.new
+      @category = Category.find(params[:category_id])
+      @service_type = @category.service_types.build
       @service_type.service_type_reservations.build(service_type_id: @service_type.id)
-      @service_type.blocked_days.build
+      @service_type.build_blocked_day
     end
 
     # GET /service_types/1/edit
     def edit
-      setDuration(@service_type)
+      setDuration(@category, @service_type)
     end
 
     # POST /service_types
     def create
-      @service_type = ServiceType.new(service_type_params)
+      @category = Category.find(params[:category_id])
+      @service_type = @category.service_types.new(service_type_params)
       setPrice(@service_type)
-      setDuration(@service_type)
+      setDuration(@category, @service_type)
       if @service_type.save
-        redirect_to @service_type, notice: 'Service type was successfully created.'
+        redirect_to [@category, @service_type], notice: 'Service type was successfully created.'
       else
         render :new
       end
@@ -48,7 +50,7 @@ module Booking
     def update
       setPrice(@service_type)
       if @service_type.update(service_type_params)
-        redirect_to @service_type, notice: 'Service type was successfully updated.'
+        redirect_to [@category, @service_type], notice: 'Service type was successfully updated.'
       else
         render :edit
       end
@@ -63,12 +65,13 @@ module Booking
     private
       # Use callbacks to share common setup or constraints between actions.
       def set_service_type
+        @category = Category.find(params[:category_id])
         @service_type = ServiceType.find(params[:id])
       end
 
       # Only allow a trusted parameter "white list" through.
       def service_type_params
-        params.require(:service_type).permit(:name, :max_occupancy, :special_price, :price, :availability, :description, :default_price, :available_from, :available_to, :duration, :multiple_day, blocked_day_attributes: [:id, :blocked_from_date, :blocked_to_date, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday])
+        params.require(:service_type).permit(:category_id, :name, :max_occupancy, :special_price, :price, :availability, :description, :default_price, :available_from, :available_to, :duration, :multiple_day, blocked_day_attributes: [:id, :blocked_from_date, :blocked_to_date, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday])
       end
 
       #Set prices of all types based on dates
@@ -133,8 +136,8 @@ module Booking
         end
       end
 
-      def setDuration(service)
-        if (!service.multiple_day)
+      def setDuration(category, service)
+        if (!category.multiple_day)
           if params[:duration] == nil
             service.duration = 1
           end

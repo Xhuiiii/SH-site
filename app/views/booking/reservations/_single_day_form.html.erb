@@ -1,13 +1,20 @@
-<!-- Give date to see avail services -->
-<div class="field" id="sel_date_field" style="display:none;">
+<!-- Give date to see available services -->
+<div class="field" id="sel_date_field">
   <%= f.label :date %><br>
-  <%= f.datetime_select :date %>
+  <div class="field" id="datepicker">
+  <%= f.text_field :date, :placeholder => Date.today.strftime('%m-%d-%Y'), :class => 'datepicker', :id =>"dt" %>
+  </div>
 </div>
 
-<div class="field">
+<div class="field" id="sel-time-field">
+  <%= f.label :time %><br>
+  <%= f.time_select :time %><br>
+</div>
+
+<div class="field" id="service_sel_field">
   <%= f.label :services %><br>
-  <%= f.collection_radio_buttons :service_type_id, Booking::ServiceType.all, :id, :name, checked: params[:service_type_id] do |b| %>
-    <div class="collection-radio-button" id="<%= Booking::ServiceType.find(b.value).id %>">
+  <%= f.collection_radio_buttons :service_type_id, @todays_avail_services, :id, :name, checked: params[:service_type_id] do |b| %>
+    <div class="service-collection-radio-button" id="<%= Booking::ServiceType.find(b.value).id %>">
       <%= b.radio_button %>
       <%= b.label %>
     </div>
@@ -15,9 +22,20 @@
 </div>
 
 <div class="field" id="occupancy_field">
-  <%= f.label :persons %><br>
-  <%= f.number_field :occupancy %>
+  <!-- Show based on which service is clicked above -->
+  <% if @selected_service %>
+  <% if @selected_service.adult_child_field %>
+    <%= f.label :adult %><br>
+    <%= f.number_field :adult %><br>
+    <%= f.label :child %><br>
+    <%= f.number_field :child %>
+  <% else %>
+    <%= f.label :persons %><br>
+    <%= f.number_field :occupancy %>
+  <% end %>
+  <% end %>
 </div>
+
 
 <% if f.object.persisted? %>
   <%= f.check_box :_destroy %>
@@ -25,79 +43,34 @@
 <% end %>
 
 <script type="text/javascript">
-  var checkedButton;
-  var radioButtons = [];
+  $("#dt").datepicker({
+          format: 'mm-dd-yyyy'
+      })
+  .on('changeDate', function(ev){
+    $('#dt').datepicker('hide');
+  });
 
-  <% if @serviceTypes %>
-    <% @serviceTypes.each do |service| %>
-      var radioButton = document.getElementById('<%= service.id %>');
-      radioButtons.push(radioButton);
-    <% end %>
-  <% end %>
+  var serviceChoices = document.getElementById('service_sel_field');
+  var date_field = document.getElementById('sel_date_field');
+  var occupancy_field = document.getElementById('occupancy_field');
+  date = new Date(date_field);
+  console.log((date_field + '_' + "attribute" + '_3i').value);
+  //if(date_field.value)
 
-  for(var index in radioButtons){
-    (function(){
-      radioButtons[index].addEventListener("change", onCheckClick.bind(radioButtons[index], index));
-    })();
-  }
+  //Use date to determine available services for the category given. Will have a default date for today if no date is chosen. 
 
-  var check_in_field = document.getElementById('check_in_field');
-  var check_out_field = document.getElementById('check_out_field');
-  var date_sel_field = document.getElementById('sel_date_field');
-  var persons_field = document.getElementById('occupancy_field');
+  //Use service to determine wither it's person / adult & child
 
-  //If a service is selected in the beginning
-  <% if @selectedService %>
-    <% if @selectedService.multiple_day %>
-      if (check_in_field){
-        check_in_field.style['display'] = 'block';
-      }
-      if (check_out_field){
-        check_out_field.style['display'] = 'block';
-      }
-      if (date_sel_field){
-        date_sel_field.style['display'] = 'none';
-      }
-    <% elsif !@selectedService.multiple_day %>
-      if (check_in_field){
-        check_in_field.style['display'] = 'none';
-      }
-      if (check_out_field){
-        check_out_field.style['display'] = 'none';
-      }
-      if (date_sel_field){
-        date_sel_field.style['display'] = 'block';
-      }
-    <% end %>
-  <% end %>
 
-  function onCheckClick(index, radioButtonClicked){
-    <% if @serviceTypes %>
-      <% @serviceTypes.each do |service| %>
-        if(radioButtonClicked.target.value == <%= service.id %>){
-          if <%= service.multiple_day %> {
-            if (check_in_field){
-              check_in_field.style['display'] = 'block';
-            }
-            if (check_out_field){
-              check_out_field.style['display'] = 'block';
-            }
-            if (date_sel_field){
-              date_sel_field.style['display'] = 'none';
-            }
-          }else if <%= !service.multiple_day %>{
-            if (check_in_field){
-              check_in_field.style['display'] = 'none';
-            }
-            if (check_out_field){
-              check_out_field.style['display'] = 'none';
-            }
-            if (date_sel_field){
-              date_sel_field.style['display'] = 'block';
-            }
-          }
-        }
-      <% end %>
-    <% end %>
+  (function(){
+    date_field.addEventListener("change", onChange.bind(date_field));
+  })();
+
+  function onChange(date_field){
+    if ((date_field.value == null) || (date_field.value == "")){
+    serviceChoices.disabled = true;
+    }else{
+    serviceChoices.disabled = false;
+    }
   };
 </script>

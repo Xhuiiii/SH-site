@@ -48,6 +48,12 @@
     <%= f.label :availability %><br>
     <%= f.number_field :availability %>
   </div>
+
+  <%= f.fields_for :timeslots do |f| %>
+    <%= render 'booking/service_types/timeslot_fields', f: f %>
+  <% end %>
+  <%= link_to_add_fields "add another timeslot", f, :timeslots %>
+
   <div class="field">
     <%= f.label :adult_child_field? %><br>
     <%= f.check_box :adult_child_field %>
@@ -92,3 +98,4 @@
     <%= f.submit %>
   </div>
 <% end %>
+

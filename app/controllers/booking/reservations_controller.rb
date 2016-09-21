@@ -9,7 +9,7 @@ module Booking
     def index
       @reservations = Reservation.all
       @reservations.each do |reservation|
-        setReservationPrice(reservation)
+        #setReservationPrice(reservation)
       end
     end
 
@@ -26,7 +26,6 @@ module Booking
       @reservation = Reservation.new
       @reservation.service_type_reservations.build
       @reservation.build_customer_reservation
-      @numberOfServices = @serviceTypes.length
 
       if params[:customer_id]
         @cust_id = params[:customer_id]
@@ -35,14 +34,35 @@ module Booking
       if params[:service_type_id]
         @selected_service = ServiceType.find(params[:service_type_id])
       end
+
+      if params[:category_id]
+        @todays_avail_services = []
+        @category_services = ServiceType.where(category_id: params[:category_id])
+        #Check if each service is available today/not
+        @category_services.each do |service|
+          #if it's not a blocked day
+          if (service.blocked_day.blocked_from_date && service.blocked_day.blocked_to_date)
+            if !((service.blocked_day.blocked_from_date <= Date.today) && 
+                (Date.today <= service.blocked_day.blocked_to_date))
+              @todays_avail_services << service
+            end
+          elsif (Date.today.monday? && !service.blocked_day.monday) ||
+              (Date.today.tuesday? && !service.blocked_day.tuesday) ||
+              (Date.today.wednesday? && !service.blocked_day.wednesday) ||
+              (Date.today.thursday? && !service.blocked_day.thursday) ||
+              (Date.today.friday? && !service.blocked_day.friday) ||
+              (Date.today.saturday? && !service.blocked_day.saturday) ||
+              (Date.today.sunday? && !service.blocked_day.sunday)
+            @todays_avail_services << service
+          end
+        end
+      end
     end
 
     # GET /reservations/1/edit
     def edit
-      @serviceTypes = ServiceType.all
-      @numberOfServices = @serviceTypes.length
       @single_reservation = @reservation.service_type_reservations.find(params[:single_service_reservation_id])
-      @selectedService = ServiceType.find(@single_reservation.service_type_id)
+      @selected_service = ServiceType.find(@single_reservation.service_type_id)
     end
 
     # POST /reservations
@@ -95,7 +115,7 @@ module Booking
       # Only allow a trusted parameter "white list" through.
       def reservation_params
         respond_to do |format|
-          format.html { params.require(:reservation).permit(:updated_at, :created_at, :total_price, customer_reservation_attributes: [:customer_id], service_type_reservations_attributes: [:id, :occupancy, :check_in, :check_out, :date, :service_type_id, :_destroy])}
+          format.html { params.require(:reservation).permit(:updated_at, :created_at, :total_price, customer_reservation_attributes: [:customer_id], service_type_reservations_attributes: [:id, :occupancy, :check_in, :check_out, :date, :time, :adult, :child, :service_type_id, :_destroy])}
           format.json { params.permit(:reservation, :id, :updated_at, :created_at, :total_price, :occupancy, :check_in, :check_out, :date, :customer_id, :service_type_id) }
         end
       end

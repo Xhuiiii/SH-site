@@ -14,6 +14,7 @@ gem 'turbolinks'
 gem 'bootstrap-sass'
 gem 'momentjs-rails'
 gem 'fullcalendar-rails'
+gem 'bootstrap-datepicker-rails'
 gem 'jbuilder'
 gem 'responders'
 # Declare any dependencies that are still in development here instead of in

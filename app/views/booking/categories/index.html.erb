@@ -17,6 +17,7 @@
 				<td><%= category.name %></td>
 				<td><%= category.multiple_day %></td>
 				<td><%= link_to "Add service", new_category_service_type_path(category_id: category.id) %></td>
+				<td><%= link_to "Book", new_reservation_path(category_id: category.id) %></td>
 			</tr>
 		<% end %>
 	</tbody>

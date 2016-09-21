@@ -16,6 +16,9 @@
 			<li><%= link_to "Reservations", reservations_path %></li>
 			<li><%= link_to "Customers", customers_path %></li>
 			<li><%= link_to "Book", service_types_path %></li>
+			<% Booking::Category.all.each do |category| %>
+			<li><%= link_to category.name, category %></li>
+			<% end %>
 		</ul>
 
 		<% if flash[:notice] %>

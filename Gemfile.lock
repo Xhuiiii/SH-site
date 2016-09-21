@@ -45,6 +45,8 @@ GEM
     arel (6.0.3)
     autoprefixer-rails (6.3.6)
       execjs
+    bootstrap-datepicker-rails (1.6.4.1)
+      railties (>= 3.0)
     bootstrap-sass (3.3.6)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
@@ -144,6 +146,7 @@ PLATFORMS
 
 DEPENDENCIES
   booking!
+  bootstrap-datepicker-rails
   bootstrap-sass
   fullcalendar-rails
   jbuilder

@@ -25,6 +25,7 @@ module Booking
       @category = Category.find(params[:category_id])
       @service_type = @category.service_types.build
       @service_type.service_type_reservations.build(service_type_id: @service_type.id)
+      @service_type.timeslots.build
       @service_type.build_blocked_day
     end
 
@@ -71,7 +72,7 @@ module Booking
 
       # Only allow a trusted parameter "white list" through.
       def service_type_params
-        params.require(:service_type).permit(:adult_child_field, :category_id, :name, :max_occupancy, :special_price, :price, :availability, :description, :default_price, :available_from, :available_to, :duration, :multiple_day, blocked_day_attributes: [:id, :blocked_from_date, :blocked_to_date, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday])
+        params.require(:service_type).permit(:adult_child_field, :category_id, :name, :max_occupancy, :special_price, :price, :availability, :description, :default_price, :available_from, :available_to, :duration, :multiple_day, timeslots_attributes: [:id, :time, :availability], blocked_day_attributes: [:id, :blocked_from_date, :blocked_to_date, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday])
       end
 
       #Set prices of all types based on dates

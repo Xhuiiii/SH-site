@@ -31,10 +31,12 @@ module Booking
         @cust_id = params[:customer_id]
       end
 
+      #If a service is chosen first
       if params[:service_type_id]
         @selected_service = ServiceType.find(params[:service_type_id])
       end
 
+      #If a category is chosen first
       if params[:category_id]
         @todays_avail_services = []
         @category_services = ServiceType.where(category_id: params[:category_id])

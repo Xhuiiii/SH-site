@@ -2,7 +2,6 @@
   <% if @reservation.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@reservation.errors.count, "error") %> prohibited this reservation from being saved:</h2>
-
       <ul>
       <% @reservation.errors.full_messages.each do |message| %>
         <li><%= message %></li>
@@ -46,3 +45,59 @@
     <%= f.submit %>
   </div>
 <% end %>
+
+<script type="text/javascript">
+  $("#dt").datepicker({
+          format: 'mm-dd-yyyy'
+      })
+  .on('changeDate', function(ev){
+    $('#dt').datepicker('hide');
+  });
+
+  var nowTemp = new Date();
+  var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+  var checkinDate = new Date();
+
+  var checkin = $('#dpd1').datepicker({
+    todayHighlight: true,
+    startDate: now,
+  }).on('changeDate', function(ev) {
+    var newDate = new Date(ev.date);
+    newDate.setDate(newDate.getDate() + 1);
+    $('#dpd2').datepicker('setStartDate', newDate);
+    checkin.hide();
+    $('#dpd2')[0].focus();
+  }).data('datepicker');
+
+  var checkout = $('#dpd2').datepicker({
+    
+  }).on('changeDate', function(ev) {
+    checkout.hide();
+  }).data('datepicker');
+
+  // var serviceChoices = document.getElementById('service_sel_field');
+  // var date_field = document.getElementById('sel_date_field');
+  // var occupancy_field = document.getElementById('occupancy_field');
+  // date = new Date(date_field);
+  // console.log((date_field + '_' + "attribute" + '_3i').value);
+  //if(date_field.value)
+
+  //Use date to determine available services for the category given. Will have a default date for today if no date is chosen. 
+
+  //Use service to determine wither it's person / adult & child
+
+
+  // (function(){
+  //   date_field.addEventListener("change", onChange.bind(date_field));
+  // })();
+
+  // function onChange(date_field){
+  //   if ((date_field.value == null) || (date_field.value == "")){
+  //   serviceChoices.disabled = true;
+  //   }else{
+  //   serviceChoices.disabled = false;
+  //   }
+  // };
+
+
+</script>

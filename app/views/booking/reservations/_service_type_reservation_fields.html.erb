@@ -6,11 +6,11 @@
 
 <div class="field" id="check_in_field">
   <%= f.label :check_in %><br>
-  <%= f.datetime_select :check_in %>
+  <%= f.text_field :check_in, :placeholder => Date.today.strftime('%m-%d-%Y'), :class => 'datepicker', :id =>"dpd1" %>
 </div>
 <div class="field" id="check_out_field">
   <%= f.label :check_out %><br>
-  <%= f.datetime_select :check_out %>
+  <%= f.text_field :check_out, :placeholder => Date.today.strftime('%m-%d-%Y'), :class => 'datepicker', :id =>"dpd2" %>
 </div>
 <div class="field" id="occupancy_field">
   <% if @selected_service.adult_child_field %>
@@ -28,4 +28,5 @@
   <%= f.check_box :_destroy %>
   <%= f.label :_destroy, "Destroy" %>
 <% end %>
+
 

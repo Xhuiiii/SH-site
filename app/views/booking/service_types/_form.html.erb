@@ -10,10 +10,8 @@
     </div>
   <% end %>
 
-  <%= f.fields_for :category do |f| %>
-    <% if params[:category_id] %>
-      <%= f.hidden_field :category_id, :value => params[:category_id] %>
-    <% end %>
+  <% if params[:category_id] %>
+    <%= f.hidden_field :category_id, :value => params[:category_id] %>
   <% end %>
 
   <div class="field">
@@ -99,3 +97,16 @@
   </div>
 <% end %>
 
+<!-- Used to add nested fields in forms -->
+<script type="text/javascript">
+  $('[data-form-prepend]').click( function(e) 
+  { var obj = $( $(this).attr('data-form-prepend') ); 
+  obj.find('input, select, textarea').each( function() { 
+    $(this).attr( 'name', function() { 
+      return $(this).attr('name').replace( 'new_record', (new Date()).getTime() ); 
+    }); 
+  }); 
+  obj.insertBefore( this ); 
+  return false; 
+  });
+</script>

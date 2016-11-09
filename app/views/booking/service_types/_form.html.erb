@@ -23,8 +23,28 @@
     <%= f.text_field :description %>
   </div>
   <div class="field">
-    <%= f.label :max_occupancy %><br>
-    <%= f.number_field :max_occupancy %>
+    <%= f.label :set_booking_limit %><br>
+    <%= f.check_box :booking_limit_bool, 'data-behavior' => 'show_child_div', id: 'booking_limit_bool' %>
+    <div class="field">
+      <%= f.label 'Booking limit (days)' %><br>
+      <%= f.number_field :booking_limit %>
+    </div>
+  </div>
+  <div class="field">
+    <%= f.label 'Max occupancy (Adult & child)' %><br>
+    <%= f.number_field :max_occupancy, id: 'max_occupancy', 'data-behavior' => 'max_occupancy_updated' %>
+  </div>
+  <div class="field">
+    <%= f.label :adult_child_field? %><br>
+    <%= f.check_box :adult_child_field, 'data-behavior' => 'show_child_div', id: "adult_child_checkbox" %>
+    <div class="field">
+      <%= f.label :adult_compulsory? %><br>
+      <%= f.check_box :adult_compulsory, 'data-behavior' => 'adult_compulsory', id: 'adult_compulsory' %><br>
+      <%= f.label :max_adult_occupancy %><br>
+      <%= f.number_field :max_adult_occupancy, id: "max_adult_occupancy", 'data-behavior' => 'max_adult_occupancy' %><br>
+      <%= f.label :max_child_occupancy %><br>
+      <%= f.number_field :max_child_occupancy, id: 'max_child_occupancy', 'data-behavior' => 'max_child_occupancy' %>
+    </div>
   </div>
   <div class="field">
     <%= f.label :default_price %><br>
@@ -32,11 +52,11 @@
   </div>
   <div class="field">
     <%= f.label :available_from %><br>
-    <%= f.date_field :available_from %>
+    <%= f.text_field :available_from, placeholder: Date.today.strftime('%d %b %Y'), class: 'datepicker', id: "dpd1", value: f.object.available_from.blank? ? '' : f.object.available_from.strftime('%d %b %Y') || nil %>
   </div>
   <div class="field">
     <%= f.label :available_to %><br>
-    <%= f.date_field :available_to %>
+    <%= f.text_field :available_to, placeholder: Date.today.strftime('%d %b %Y'), class: 'datepicker', id: "dpd2", value: f.object.available_to.blank? ? '' : f.object.available_to.strftime('%d %b %Y') %>
   </div>
   <div class="field">
     <%= f.label :price_for_given_dates %><br>
@@ -47,24 +67,76 @@
     <%= f.number_field :availability %>
   </div>
 
+  <div class="field">
+    <%= f.label :special_mondays %><br>
+    <%= f.check_box :special_mondays, 'data-behavior' => 'show_child_div', id: 'special_mondays' %><br>
+    <div class="field">
+      <%= f.label :special_monday_price %><br>
+      <%= f.number_field :special_monday_price %>
+    </div>
+  </div>
+  <div class="field">
+    <%= f.label :special_tuesdays %><br>
+    <%= f.check_box :special_tuesdays, 'data-behavior' => 'show_child_div', id: 'special_tuesdays' %><br>
+    <div class="field">
+      <%= f.label :special_tuesday_price %><br>
+      <%= f.number_field :special_tuesday_price %>
+    </div>
+  </div>
+  <div class="field">
+    <%= f.label :special_wednesdays %><br>
+    <%= f.check_box :special_wednesdays, 'data-behavior' => 'show_child_div', id: 'special_wednesdays' %><br>
+    <div class="field">
+      <%= f.label :special_wednesday_price %><br>
+      <%= f.number_field :special_wednesday_price %>
+    </div>
+  </div>
+  <div class="field">
+    <%= f.label :special_thursdays %><br>
+    <%= f.check_box :special_thursdays, 'data-behavior' => 'show_child_div', id: 'special_thursdays' %><br>
+    <div class="field">
+      <%= f.label :special_thursday_price %><br>
+      <%= f.number_field :special_thursday_price %>
+    </div>
+  </div>
+  <div class="field">
+    <%= f.label :special_fridays %><br>
+    <%= f.check_box :special_fridays, 'data-behavior' => 'show_child_div', id: 'special_fridays' %><br>
+    <div class="field">
+      <%= f.label :special_friday_price %><br>
+      <%= f.number_field :special_friday_price %>
+    </div>
+  </div>
+  <div class="field">
+    <%= f.label :special_saturdays %><br>
+    <%= f.check_box :special_saturdays, 'data-behavior' => 'show_child_div', id: 'special_saturdays' %><br>
+    <div class="field">
+      <%= f.label :special_saturday_price %><br>
+      <%= f.number_field :special_saturday_price %>
+    </div>
+  </div>
+  <div class="field">
+    <%= f.label :special_sundays %><br>
+    <%= f.check_box :special_sundays, 'data-behavior' => 'show_child_div', id: 'special_sundays' %><br>
+    <div class="field">
+      <%= f.label :special_sunday_price %><br>
+      <%= f.number_field :special_sunday_price %>
+    </div>
+  </div>
+
   <%= f.fields_for :timeslots do |f| %>
     <%= render 'booking/service_types/timeslot_fields', f: f %>
   <% end %>
   <%= link_to_add_fields "add another timeslot", f, :timeslots %>
 
-  <div class="field">
-    <%= f.label :adult_child_field? %><br>
-    <%= f.check_box :adult_child_field %>
-  </div>
-
   <%= f.fields_for :blocked_day do |f| %>
     <div class="field">
       <%= f.label :unavailable_from_date %><br>
-      <%= f.date_field :blocked_from_date %>
+      <%= f.text_field :blocked_from_date, placeholder: Date.today.strftime('%d %b %Y'), class: 'datepicker', id: "dpd3", value: f.object.blocked_from_date.blank? ? '' : f.object.blocked_from_date.strftime('%d %b %Y') %>
     </div>
     <div class="field">
       <%= f.label :unavailable_to_date %><br>
-      <%= f.date_field :blocked_to_date %>
+      <%= f.text_field :blocked_to_date, placeholder: Date.today.strftime('%d %b %Y'), class: 'datepicker', id: 'dpd4', value: f.object.blocked_to_date.blank? ? '' : f.object.blocked_to_date.strftime('%d %b %Y') %>
     </div>
     <div class="field">
       <%= f.label :monday %><br>
@@ -99,14 +171,14 @@
 
 <!-- Used to add nested fields in forms -->
 <script type="text/javascript">
-  $('[data-form-prepend]').click( function(e) 
-  { var obj = $( $(this).attr('data-form-prepend') ); 
-  obj.find('input, select, textarea').each( function() { 
-    $(this).attr( 'name', function() { 
-      return $(this).attr('name').replace( 'new_record', (new Date()).getTime() ); 
-    }); 
-  }); 
-  obj.insertBefore( this ); 
-  return false; 
+  $('[data-form-prepend]').click( function(e)
+  { var obj = $( $(this).attr('data-form-prepend') );
+  obj.find('input, select, textarea').each( function() {
+    $(this).attr( 'name', function() {
+      return $(this).attr('name').replace( 'new_record', (new Date()).getTime() );
+    });
+  });
+  obj.insertBefore( this );
+  return false;
   });
 </script>

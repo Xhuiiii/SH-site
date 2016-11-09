@@ -1,11 +1,11 @@
 <div class="field">
-	<%= f.label :add_available_timeslots? %><br>
+	<h4>New Timeslot</h4>
 	<%= f.label :time %><br>
 	<%= f.time_field :time %><br>
 	<%= f.label :number_available %><br>
 	<%= f.number_field :availability %><br>
-	<%= f.label :extra_cost %><br>
-	<%= f.number_field :extra_cost %><br>
+	<%= f.label :timeslot_cost %><br>
+	<%= f.number_field :timeslot_cost %><br>
 	<% if f.object.persisted? %>
 		<%= f.label :delete %><br>
 		<%= f.check_box :_destroy %>

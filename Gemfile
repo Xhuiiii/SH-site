@@ -10,6 +10,9 @@ gem 'sass-rails', '~> 5.0'
 #JQuery as the JavaScript library
 gem 'jquery-rails'
 #Turbolinks makes following links in the web app faster
+group :assets do
+  gem 'coffee-rails'
+end
 gem 'turbolinks'
 gem 'bootstrap-sass'
 gem 'momentjs-rails'
@@ -24,4 +27,3 @@ gem 'responders'
 
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
-

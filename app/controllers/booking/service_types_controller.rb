@@ -8,7 +8,7 @@ module Booking
     def index
       #Check for date valid services
       @service_types = []
-      all_service_types = ServiceType.all  
+      all_service_types = ServiceType.all
       all_service_types.each do |service_type|
         showPrice(service_type)
       end
@@ -72,7 +72,7 @@ module Booking
 
       # Only allow a trusted parameter "white list" through.
       def service_type_params
-        params.require(:service_type).permit(:adult_child_field, :category_id, :name, :max_occupancy, :special_price, :price, :availability, :description, :default_price, :available_from, :available_to, :duration, :multiple_day, timeslots_attributes: [:id, :time, :availability, :_destroy], blocked_day_attributes: [:id, :blocked_from_date, :blocked_to_date, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday])
+        params.require(:service_type).permit(:adult_child_field, :max_adult_occupancy, :max_child_occupancy, :adult_compulsory, :category_id, :name, :max_occupancy, :price, :availability, :description, :default_price, :booking_limit, :booking_limit_bool, :special_price, :available_from, :available_to, :special_mondays, :special_tuesdays, :special_wednesdays, :special_thursdays, :special_fridays, :special_saturdays, :special_sundays, :special_monday_price, :special_tuesday_price, :special_wednesday_price, :special_thursday_price, :special_friday_price, :special_saturday_price, :special_sunday_price, :duration, :multiple_day, timeslots_attributes: [:id, :time, :availability, :timeslot_cost, :_destroy], blocked_day_attributes: [:id, :blocked_from_date, :blocked_to_date, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday])
       end
 
       #Set prices of all types based on dates
@@ -100,10 +100,10 @@ module Booking
         end
 
         #if valid and there's a special price
-        if (from_valid && to_valid && type.special_price) 
+        if (from_valid && to_valid && type.special_price)
           type.price = type.special_price
-          @service_types << type 
-          #if there's no special  
+          @service_types << type
+          #if there's no special
         elsif type.default_price
           type.price = type.default_price
           @service_types << type

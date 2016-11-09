@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.version     = Booking::VERSION
   s.authors     = ["Xhuiiii"]
   s.email       = ["robyn.jh.liu@gmail.com"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of Booking."
-  s.description = "TODO: Description of Booking."
+  s.homepage    = "localhost:3000"
+  s.summary     = "Summary of Booking."
+  s.description = "Description of Booking."
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]

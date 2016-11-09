@@ -11,19 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160922082551) do
+ActiveRecord::Schema.define(version: 20161104122945) do
 
   create_table "booking_blocked_days", force: :cascade do |t|
-    t.date    "blocked_from_date"
-    t.date    "blocked_to_date"
-    t.boolean "monday"
-    t.boolean "tuesday"
-    t.boolean "wednesday"
-    t.boolean "thursday"
-    t.boolean "friday"
-    t.boolean "saturday"
-    t.boolean "sunday"
-    t.integer "service_type_id"
+    t.datetime "blocked_from_date"
+    t.datetime "blocked_to_date"
+    t.boolean  "monday"
+    t.boolean  "tuesday"
+    t.boolean  "wednesday"
+    t.boolean  "thursday"
+    t.boolean  "friday"
+    t.boolean  "saturday"
+    t.boolean  "sunday"
+    t.integer  "service_type_id"
   end
 
   create_table "booking_categories", force: :cascade do |t|
@@ -74,10 +74,9 @@ ActiveRecord::Schema.define(version: 20160922082551) do
     t.datetime "check_in"
     t.datetime "check_out"
     t.string   "date"
-    t.float    "single_res_price"
     t.integer  "occupancy"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.integer  "service_type_id"
     t.integer  "reservation_id"
     t.integer  "adult"
@@ -94,19 +93,39 @@ ActiveRecord::Schema.define(version: 20160922082551) do
     t.date     "available_from"
     t.date     "available_to"
     t.float    "default_price"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
     t.integer  "special_price"
     t.integer  "duration"
     t.integer  "category_id"
     t.boolean  "adult_child_field"
+    t.boolean  "special_mondays"
+    t.boolean  "special_tuesdays"
+    t.boolean  "special_wednesdays"
+    t.boolean  "special_thursdays"
+    t.boolean  "special_fridays"
+    t.boolean  "special_saturdays"
+    t.boolean  "special_sundays"
+    t.integer  "special_monday_price"
+    t.integer  "special_tuesday_price"
+    t.integer  "special_wednesday_price"
+    t.integer  "special_thursday_price"
+    t.integer  "special_friday_price"
+    t.integer  "special_saturday_price"
+    t.integer  "special_sunday_price"
+    t.boolean  "timeslot_compulsory"
+    t.integer  "max_adult_occupancy"
+    t.integer  "max_child_occupancy"
+    t.boolean  "adult_compulsory"
+    t.boolean  "booking_limit_bool"
+    t.integer  "booking_limit"
   end
 
   create_table "booking_timeslots", force: :cascade do |t|
     t.time    "time"
     t.integer "availability"
     t.integer "service_type_id"
-    t.integer "extra_cost"
+    t.integer "timeslot_cost"
   end
 
   create_table "booking_todays_bookings", force: :cascade do |t|

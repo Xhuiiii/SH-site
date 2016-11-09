@@ -10,5 +10,7 @@ module Booking
 
   	validates :name, :length => {:minimum => 1}
   	validates_presence_of :default_price
+    validates :max_occupancy, :numericality => {:greater_than_or_equal_to => 1}
+
   end
 end

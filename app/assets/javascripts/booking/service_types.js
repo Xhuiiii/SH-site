@@ -1,7 +1,7 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
 
-$(document).ready(function(){
+$(document).on('turbolinks:load', function(){
   //Occupancy
   var adult_child_checkbox = document.getElementById("adult_child_checkbox");
   display_child_div(adult_child_checkbox);
@@ -41,10 +41,16 @@ $(document).ready(function(){
   }).on('changeDate', function(ev) {
     special_to.hide();
   }).on('show', function(ev){
-    var special_from_date = $('#dpd1').datepicker('getDate');
-    var startDate = new Date();
-    startDate.setDate(special_from_date.getDate() + 1);
-    $('#dpd2').datepicker('setStartDate', startDate);
+    //If the first datepicker has a value
+    if ($('#dpd1').datepicker()[0].value){
+      var special_from_date = $('#dpd1').datepicker('getDate');
+      var startDate = new Date();
+      startDate.setDate(special_from_date.getDate() + 1);
+      $('#dpd2').datepicker('setStartDate', startDate);
+    }else{
+      special_to.hide();
+      $('#dpd1')[0].focus();
+    }
   }).data('datepicker');
 
   var unavailable_from = $('#dpd3').datepicker({
@@ -66,10 +72,15 @@ $(document).ready(function(){
   }).on('changeDate', function(ev) {
     unavailable_to.hide();
   }).on('show', function(ev){
-    var unavailable_from_date = $('#dpd3').datepicker('getDate');
-    var startDate = new Date();
-    startDate.setDate(unavailable_from_date.getDate() + 1);
-    $('#dpd4').datepicker('setStartDate', startDate);
+    if($('#dpd3').datepicker()[0].value){
+      var unavailable_from_date = $('#dpd3').datepicker('getDate');
+      var startDate = new Date();
+      startDate.setDate(unavailable_from_date.getDate() + 1);
+      $('#dpd4').datepicker('setStartDate', startDate);
+    }else{
+      unavailable_to.hide();
+      $('#dpd3')[0].focus();
+    }
   }).data('datepicker');
 
   //Add timeslots
@@ -146,8 +157,10 @@ $(document).on('change', "[data-behavior~=max_occupancy_updated]", function(){
 });
 
 $(document).on('change', "[data-behavior~=adult_compulsory]", function(){
-  if(parseInt(max_adult_occupancy.value) < 1){
-    max_adult_occupancy.value = 1;
+  if(this.checked){
+    if((parseInt(max_adult_occupancy.value) < 1) || (!max_adult_occupancy.value)){
+      max_adult_occupancy.value = 1;
+    }
   }
 });
 

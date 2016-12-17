@@ -2,6 +2,13 @@
 
 # Version of your assets, change this if you want to expire all your assets.
 Rails.application.config.assets.version = '1.0'
+Rails.application.config.assets.precompile += %w( booking/reservations.js )
+Rails.application.config.assets.precompile += %w( booking/service_types.js )
+Rails.application.config.assets.precompile += %w( booking/categories.js )
+Rails.application.config.assets.precompile += %w( booking/customers.js )
+Rails.application.config.assets.precompile += %w( booking/service_calendars.js )
+Rails.application.config.assets.precompile += %w( booking/todays_bookings.js )
+
 
 # Add additional assets to the asset load path
 # Rails.application.config.assets.paths << Emoji.images_path

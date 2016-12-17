@@ -1,26 +1,28 @@
+<%= f.hidden_field :multiple_day, :value => true, id: 'multiple_day' %>
+<%= f.hidden_field :category_id, :value => params[:category_id], id: 'category_id' %>
+<%= f.hidden_field :service_type_id, id: 'service_type_id' %>
+<%= f.hidden_field :occupancy, id: 'occupancy' %>
+<%= f.hidden_field :adult, id: 'adult_occupancy' %>
+<%= f.hidden_field :child, id: 'child_occupancy' %>
+
 <!-- Give dates to see avail services -->
-<div class="field" id="check_in_field" style="display:none;">
+<div class="field" id="check_in_field">
   <%= f.label :check_in %><br>
-  <%= f.datetime_select :check_in %>
+  <%= f.text_field :check_in, :placeholder => Date.today.strftime('%d %b %Y'), :class => 'datepicker', :id =>"dpd1" %>
 </div>
-<div class="field" id="check_out_field" style="display:none;">
+<div class="field" id="check_out_field">
   <%= f.label :check_out %><br>
-  <%= f.datetime_select :check_out %>
+  <%= f.text_field :check_out, :placeholder => Date.today.strftime('%d %b %Y'), :class => 'datepicker', :id =>"dpd2" %>
 </div>
 
-<div class="field">
+<div class="field" id="service_select_field">
   <%= f.label :services %><br>
-  <%= f.collection_radio_buttons :service_type_id, Booking::ServiceType.all, :id, :name, checked: params[:service_type_id] do |b| %>
-    <div class="collection-radio-button" id="<%= Booking::ServiceType.find(b.value).id %>">
-      <%= b.radio_button %>
-      <%= b.label %>
-    </div>
-  <% end %>
+  <div id="service_selection">
+
+  </div>
 </div>
 
 <div class="field" id="occupancy_field">
-  <%= f.label :persons %><br>
-  <%= f.number_field :occupancy %>
 </div>
 
 <% if f.object.persisted? %>
@@ -29,5 +31,5 @@
 <% end %>
 
 <script type="text/javascript">
-  
+
 </script>

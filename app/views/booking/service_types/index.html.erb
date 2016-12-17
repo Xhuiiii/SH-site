@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
-<h1>My Services 
-<button class="add-service"><%= link_to 'Add', categories_path %></button> 
+<h1>My Services
+<button class="add-service"><%= link_to 'Add', categories_path %></button>
 </h1>
 
 <table class="table table-hover">
@@ -9,8 +9,7 @@
     <tr>
       <th class="service-col">Service</th>
       <th class="occupancy-col">Max occupancy/Peoples</th>
-      <th class="price-col">Price</th>
-      <th class="availability-col">Availability</th>
+      <th class="price-col">Day Price</th>
       <th class="available-period-col">Valid period</th>
       <th colspan="3"></th>
     </tr>
@@ -20,10 +19,14 @@
     <% @service_types.each do |service_type| %>
       <tr>
         <td><%= service_type.name %><br><%= service_type.description %></td>
-        <td><%= service_type.max_occupancy %></td> 
-        <td><%= service_type.price %></td>
-        <td><%= service_type.availability %></td>
-        <td><%= service_type.available_from %> - <%= service_type.available_to %></td>
+        <td><%= service_type.max_occupancy %></td>
+        <!-- Get day price from service calendar -->
+        <td></td>
+        <% if service_type.available_from && service_type.available_to %>
+          <td><%= service_type.available_from.strftime('%d %b %Y') %> - <%= service_type.available_to.strftime('%d %b %Y') %></td>
+        <% else %>
+          <td></td>
+        <% end %>
         <td><%= link_to 'Book', new_reservation_path(service_type_id: service_type.id) %></td>
         <td><%= link_to 'Show', category_service_type_path(category_id: service_type.category_id, id: service_type.id) %></td>
         <td><%= link_to 'Edit', edit_category_service_type_path(category_id: service_type.category_id, id: service_type.id) %></td>
@@ -34,4 +37,3 @@
 </table>
 
 <br>
-

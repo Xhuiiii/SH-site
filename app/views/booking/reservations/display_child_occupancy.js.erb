@@ -1,0 +1,9 @@
+$('#child_select').empty();
+
+var max_child = parseInt("<%= @max_child_occupancy %>");
+for(var c = 0; c <= max_child; c++){
+  var child_option = document.createElement('option');
+  child_option.value = c;
+  child_option.innerHTML = c;
+  $('#child_select').append(child_option);
+}

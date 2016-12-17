@@ -1,0 +1,137 @@
+//Get the year currently viewed
+var viewYear = $(".year.focused");
+var year = viewYear[0].innerHTML;
+//Get the month currently viewed
+var viewMonth = $(".month.focused");
+var month = viewMonth[0].innerHTML;
+
+//Convert month to int
+switch(month){
+  case "Jan":
+    month = 0;
+    break;
+  case "Feb":
+    month = 1;
+    break;
+  case "Mar":
+    month = 2;
+    break;
+  case "Apr":
+    month = 3;
+    break;
+  case "May":
+    month = 4;
+    break;
+  case "Jun":
+    month = 5;
+    break;
+  case "Jul":
+    month = 6;
+    break;
+  case "Aug":
+    month = 7;
+    break;
+  case "Sep":
+    month = 8;
+    break;
+  case "Oct":
+    month = 9;
+    break;
+  case "Nov":
+    month = 10;
+    break;
+  case "Dec":
+    month = 11;
+    break;
+}
+
+//Get days that aren't in next month and not disabled (blocked)
+var available_days = []
+available_days = $(".day").not(".new").not(".disabled").not(".old");
+
+//Get special offer start & end dates
+var special_start = new Date("<%= @special_start %>");
+var special_end = new Date("<%= @special_end %>");
+
+//Remove any previous price labels
+$('.priceLabel').remove();
+
+//Get & Set price for all available days
+Array.from(available_days).forEach(function(day){
+  var dayPrice;
+  var date = new Date();
+  //Set the month and day to currently viewed
+  date.setMonth(month, day.innerHTML);
+  //Set the currently viewed year
+  date.setYear(year);
+
+  //Get prices for dates
+  //If date is a special day, set special price
+  switch(date.getDay()){
+    //Sunday
+    case 0:
+      if("<%= @special_sunday_price %>"){
+        dayPrice = "<%= @special_sunday_price %>";
+      }
+      break;
+    //monday
+    case 1:
+      if("<%= @special_monday_price %>"){
+        dayPrice = "<%= @special_monday_price %>";
+      }
+      break;
+    //tuesday
+    case 2:
+      if("<%= @special_tuesday_price %>"){
+        dayPrice = "<%= @special_tuesday_price %>";
+      }
+      break;
+    //Wednesday
+    case 3:
+      if("<%= @special_wednesday_price %>"){
+        dayPrice = "<%= @special_wednesday_price %>";
+      }
+      break;
+    //Thursday
+    case 4:
+      if("<%= @special_thursday_price %>"){
+        dayPrice = "<%= @special_thursday_price %>";
+      }
+      break;
+    //Friday
+    case 5:
+      if("<%= @special_friday_price %>"){
+        dayPrice = "<%= @special_friday_price %>";
+      }
+      break;
+    //Saturday
+    case 6:
+      if("<%= @special_saturday_price %>"){
+        dayPrice = "<%= @special_saturday_price %>";
+      }
+      break;
+  }
+
+  //If date is between special dates, set special price
+  if ((date >= special_start) && (date <= special_end)){
+    dayPrice = "<%= @special_price %>";
+  }
+
+  //If there isn't a special price
+  if(!dayPrice){
+    //Set the price to default
+    dayPrice = "<%= @default_price %>";
+  }
+
+  //Wrap price in a div
+  var priceElement = document.createElement("div");
+  priceElement.className = "priceLabel";
+  //Create price label
+  var priceLabel = document.createElement("label");
+  //Add day price to label
+  priceLabel.innerHTML = "$" + dayPrice;
+  //Append a label to the div
+  priceElement.appendChild(priceLabel);
+  //Append the price div to date
+  day.appendChild(priceElement);
+});

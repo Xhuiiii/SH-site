@@ -1,0 +1,70 @@
+$('#occupancy_field').empty();
+
+if("<%= @adult_child_required %>" == "true"){
+  //Create labels
+  var adult_label = document.createElement('label');
+  var child_label = document.createElement('label');
+  adult_label.innerHTML = "Adult" + "&nbsp" ;
+  child_label.innerHTML = "Child" + "&nbsp";
+
+  //Create dropdowns
+  var adult_select = document.createElement('select');
+  //If adult changes, recalculate max total occupancy (adult takes priority)
+  adult_select.setAttribute('data-behavior', 'adult_occupancy_selected');
+  var child_select = document.createElement('select');
+  //Give the child select an id to be able to alter it
+  child_select.setAttribute('id', 'child_select');
+  child_select.setAttribute('data-behavior', 'child_occupancy_selected');
+
+  adult_select.setAttribute('type', 'number');
+  child_select.setAttribute('type', 'number');
+  //Get max occupancy values
+  var max_adult = parseInt("<%= @max_adult_occupancy %>");
+  var max_child = parseInt("<%= @max_child_occupancy %>");
+
+  if ("<%= @adult_compulsory %>" == "true"){
+    for(var a = 1, c = 0; a <= max_adult, c <= max_child; a++, c++){
+      var adult_option = document.createElement('option');
+      adult_option.value = a;
+      adult_option.innerHTML = a;
+      adult_select.appendChild(adult_option);
+
+      var child_option = document.createElement('option');
+      child_option.value = c;
+      child_option.innerHTML = c;
+      child_select.appendChild(child_option);
+    }
+  }else{
+    for(var a = 0, c = 0; a <= max_adult, c <= max_child; a++, c++){
+      var adult_option = document.createElement('option');
+      adult_option.value = a;
+      adult_option.innerHTML = a;
+      adult_select.appendChild(adult_option);
+
+      var child_option = document.createElement('option');
+      child_option.value = c;
+      child_option.innerHTML = c;
+      child_select.appendChild(child_option);
+    }
+  }
+
+  $('#occupancy_field').append(adult_label);
+  $('#occupancy_field').append(adult_select);
+  $('#occupancy_field').append(child_label);
+  $('#occupancy_field').append(child_select);
+}else{
+  //Create a number select with max occupancy as limit
+  var occupancy_select = document.createElement('select');
+  var occupancy_label = document.createElement('label');
+  occupancy_label.innerHTML = "Persons" + "&nbsp";
+  occupancy_select.setAttribute('data-behavior', "occupancy_selected");
+  var max_occupancy = parseInt("<%= @max_occupancy %>");
+  for(var i = 1; i <= max_occupancy; i++){
+    var occupancy_option = document.createElement('option');
+    occupancy_option.value = i;
+    occupancy_option.innerHTML = i;
+    occupancy_select.appendChild(occupancy_option);
+  }
+  $('#occupancy_field').append(occupancy_label);
+  $('#occupancy_field').append(occupancy_select);
+}

@@ -37,6 +37,7 @@
 				<%= flash[:alert] %>
 			</div>
 		<% end %>
+    <%= javascript_include_tag params[:controller], "data-turbolinks-track" => "reload" %>
 		<%= yield %>
 	</div>
 

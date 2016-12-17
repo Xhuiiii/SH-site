@@ -3,11 +3,10 @@
 <p class="pull-right">
   <strong>Reservations</strong><br>
   <% if @single_reservations %>
-    <% @single_reservations.each do |single_res| %> 
+    <% @single_reservations.each do |single_res| %>
       Service: <%= Booking::ServiceType.find(single_res.service_type_id).name %><br>
       Check in: <%= single_res.check_in %><br>
       Check out: <%= single_res.check_out %><br>
-      Price: <%= single_res.single_res_price %><br>
       <%= link_to 'Edit reservation', edit_reservation_path(id: single_res.reservation_id, single_service_reservation_id: single_res) %><br>
       <%= link_to 'Delete reservation', reservation_service_type_reservation_path(reservation_id: single_res.reservation_id ,id: single_res.id) , method: :delete, data: {confirm: 'Are you sure?'} %><br>
     <% end %>

@@ -1,39 +1,30 @@
+<%= f.hidden_field :multiple_day, :value => false, id: 'multiple_day' %>
+<%= f.hidden_field :category_id, :value => params[:category_id], id: 'category_id' %>
+<%= f.hidden_field :service_type_id, id: 'service_type_id' %>
+<%= f.hidden_field :time, id: 'chosen_timeslot' %>
+<%= f.hidden_field :occupancy, id: 'occupancy' %>
+<%= f.hidden_field :adult, id: 'adult_occupancy' %>
+<%= f.hidden_field :child, id: 'child_occupancy' %>
+
 <!-- Give date to see available services -->
 <div class="field" id="sel_date_field">
   <%= f.label :date %><br>
   <div class="field" id="datepicker">
-  <%= f.text_field :date, :placeholder => Date.today.strftime('%m-%d-%Y'), :class => 'datepicker', :id =>"dt" %>
+  <%= f.text_field :date, :placeholder => Date.today.strftime('%d %b %Y'), :class => 'datepicker', :id =>"dpd1" %>
   </div>
 </div>
 
-<div class="field" id="sel-time-field">
-  <%= f.label :time %><br>
-  <%= f.time_select :time %><br>
+<div class="field" id="service_select_field">
+  <%= f.label :services %><br>
+  <div id="service_selection"></div>
 </div>
 
-<div class="field" id="service_sel_field">
-  <%= f.label :services %><br>
-  <%= f.collection_radio_buttons :service_type_id, @todays_avail_services, :id, :name, checked: params[:service_type_id] do |b| %>
-    <div class="service-collection-radio-button" id="<%= Booking::ServiceType.find(b.value).id %>">
-      <%= b.radio_button %>
-      <%= b.label %>
-    </div>
-  <% end %>
+<div class="field" id="sel_time_field">
+  <%= f.label :time %><br>
+  <div id="timeslot_selection"></div>
 </div>
 
 <div class="field" id="occupancy_field">
-  <!-- Show based on which service is clicked above -->
-  <% if @selected_service %>
-  <% if @selected_service.adult_child_field %>
-    <%= f.label :adult %><br>
-    <%= f.number_field :adult %><br>
-    <%= f.label :child %><br>
-    <%= f.number_field :child %>
-  <% else %>
-    <%= f.label :persons %><br>
-    <%= f.number_field :occupancy %>
-  <% end %>
-  <% end %>
 </div>
 
 

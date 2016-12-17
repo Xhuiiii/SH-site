@@ -1,7 +1,17 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
 
-$(document).on('turbolinks:load', function(){
+//Display child div if checkbox is checked
+var display_child_div = function(checkbox){
+  if(checkbox){
+    if(checkbox.checked){
+      checkbox.parentElement.getElementsByTagName("div")[0].style.display = "block";
+    }else{
+      checkbox.parentElement.getElementsByTagName("div")[0].style.display = "none";
+    }
+  }
+}
+$(".service_types").ready(function(){
   //Occupancy
   var adult_child_checkbox = document.getElementById("adult_child_checkbox");
   display_child_div(adult_child_checkbox);
@@ -33,6 +43,7 @@ $(document).on('turbolinks:load', function(){
     $('#dpd2').datepicker('defaultViewDate', newDate);
     $('#dpd2').datepicker('setDate', newDate);
     special_from.hide();
+    $('#dpd2').datepicker('show');
     $('#dpd2')[0].focus();
   }).data('datepicker');
 
@@ -64,6 +75,7 @@ $(document).on('turbolinks:load', function(){
     $('#dpd4').datepicker('defaultViewDate', newDate);
     $('#dpd4').datepicker('setDate', newDate);
     unavailable_from.hide();
+    $('#dpd4').datepicker('show');
     $('#dpd4')[0].focus();
   }).data('datepicker');
 
@@ -91,6 +103,7 @@ $(document).on('turbolinks:load', function(){
       return $(this).attr('name').replace( 'new_record', (new Date()).getTime() );
     });
   });
+  obj.insertBefore( this );
   return false;
   });
 
@@ -115,17 +128,6 @@ $(document).on('turbolinks:load', function(){
   var booking_limit_bool = document.getElementById('booking_limit_bool');
   display_child_div(booking_limit_bool);
 });
-
-//Display child div if checkbox is checked
-var display_child_div = function(checkbox){
-  if(checkbox){
-    if(checkbox.checked){
-      checkbox.parentElement.getElementsByTagName("div")[0].style.display = "block";
-    }else{
-      checkbox.parentElement.getElementsByTagName("div")[0].style.display = "none";
-    }
-  }
-}
 
 $(document).on('change', "[data-behavior~=show_child_div]",  function(ev){
   if(this.checked){

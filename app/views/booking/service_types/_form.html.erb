@@ -51,6 +51,17 @@
     <%= f.number_field :default_price, :step => 'any' %>
   </div>
   <div class="field">
+    <%= f.label :default_availability %><br>
+    <%= f.number_field :availability %>
+  </div>
+
+  <%= f.fields_for :timeslots do |f| %>
+    <%= render 'booking/service_types/timeslot_fields', f: f %>
+  <% end %>
+  <%= link_to_add_fields "add another timeslot", f, :timeslots %>
+
+  <!-- Specials -->
+  <div class="field">
     <%= f.label :available_from %><br>
     <%= f.text_field :available_from, placeholder: Date.today.strftime('%d %b %Y'), class: 'datepicker', id: "dpd1", value: f.object.available_from.blank? ? '' : f.object.available_from.strftime('%d %b %Y') || nil %>
   </div>
@@ -63,8 +74,8 @@
     <%= f.number_field :special_price, :step => 'any' %>
   </div>
   <div class="field">
-    <%= f.label :availability %><br>
-    <%= f.number_field :availability %>
+    <%= f.label :special_availability %><br>
+    <%= f.number_field :special_availability %>
   </div>
 
   <div class="field">
@@ -124,10 +135,9 @@
     </div>
   </div>
 
-  <%= f.fields_for :timeslots do |f| %>
-    <%= render 'booking/service_types/timeslot_fields', f: f %>
+  <%= f.fields_for :service_calendars do |f| %>
+    <%= render 'booking/service_types/service_calendar_fields', f: f %>
   <% end %>
-  <%= link_to_add_fields "add another timeslot", f, :timeslots %>
 
   <%= f.fields_for :blocked_day do |f| %>
     <div class="field">
@@ -168,17 +178,3 @@
     <%= f.submit %>
   </div>
 <% end %>
-
-<!-- Used to add nested fields in forms -->
-<script type="text/javascript">
-  $('[data-form-prepend]').click( function(e)
-  { var obj = $( $(this).attr('data-form-prepend') );
-  obj.find('input, select, textarea').each( function() {
-    $(this).attr( 'name', function() {
-      return $(this).attr('name').replace( 'new_record', (new Date()).getTime() );
-    });
-  });
-  obj.insertBefore( this );
-  return false;
-  });
-</script>

@@ -1,0 +1,17 @@
+//Clear service select options
+$('#service_selection').empty();
+
+//Create new select options
+"<% @available_services.each do |s| %>"
+  var label = document.createElement('label');
+  label.innerHTML = "&nbsp" + "<%= s.name %>";
+  var button = document.createElement('input');
+  button.setAttribute('type', 'radio');
+  button.value = "<%= s.id %>";
+  button.name = "service_select";
+  button.setAttribute('data-behavior', "service_selected");
+  var divEl = document.createElement('div');
+  divEl.appendChild(button);
+  divEl.appendChild(label);
+  $('#service_selection').append(divEl);
+"<% end %>"

@@ -8,16 +8,13 @@ module Booking
     def index
       #Check for date valid services
       @service_types = []
-      all_service_types = ServiceType.all
-      all_service_types.each do |service_type|
-        showPrice(service_type)
-      end
+      @service_types = ServiceType.all
     end
 
     # GET /service_types/1
     def show
       @service_type = ServiceType.find(params[:id])
-      setPrice(@service_type)
+      @currentPrice = setPrice(@service_type)
     end
 
     # GET /service_types/new
@@ -25,21 +22,22 @@ module Booking
       @category = Category.find(params[:category_id])
       @service_type = @category.service_types.build
       @service_type.service_type_reservations.build(service_type_id: @service_type.id)
+      @service_calendar = @service_type.service_calendars.build(service_type_id: @service_type.id)
       @service_type.timeslots.build
       @service_type.build_blocked_day
     end
 
     # GET /service_types/1/edit
     def edit
-      setDuration(@category, @service_type)
+
     end
 
     # POST /service_types
     def create
       @category = Category.find(params[:category_id])
-      @service_type = @category.service_types.new(service_type_params)
-      setPrice(@service_type)
+      @service_type = @category.service_types.create!(service_type_params)
       setDuration(@category, @service_type)
+      setCalendarDaySpecialAvailability(@service_type.id)
       if @service_type.save
         redirect_to [@category, @service_type], notice: 'Service type was successfully created.'
       else
@@ -49,7 +47,8 @@ module Booking
 
     # PATCH/PUT /service_types/1
     def update
-      setPrice(@service_type)
+      setDuration(@category, @service_type)
+      setCalendarDaySpecialAvailability(@service_type.id)
       if @service_type.update(service_type_params)
         redirect_to [@category, @service_type], notice: 'Service type was successfully updated.'
       else
@@ -72,42 +71,7 @@ module Booking
 
       # Only allow a trusted parameter "white list" through.
       def service_type_params
-        params.require(:service_type).permit(:adult_child_field, :max_adult_occupancy, :max_child_occupancy, :adult_compulsory, :category_id, :name, :max_occupancy, :price, :availability, :description, :default_price, :booking_limit, :booking_limit_bool, :special_price, :available_from, :available_to, :special_mondays, :special_tuesdays, :special_wednesdays, :special_thursdays, :special_fridays, :special_saturdays, :special_sundays, :special_monday_price, :special_tuesday_price, :special_wednesday_price, :special_thursday_price, :special_friday_price, :special_saturday_price, :special_sunday_price, :duration, :multiple_day, timeslots_attributes: [:id, :time, :availability, :timeslot_cost, :_destroy], blocked_day_attributes: [:id, :blocked_from_date, :blocked_to_date, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday])
-      end
-
-      #Set prices of all types based on dates
-      def showPrice(type)
-      #if there is a start date
-        if(type.available_from)
-          if (type.available_from <= Date.today)
-            from_valid = true
-          else
-            to_valid = false
-          end
-        else
-          from_valid = true
-        end
-
-        # if there is an end date
-        if(type.available_to)
-          if(type.available_to >= Date.today)
-            to_valid = true
-          else
-            to_valid = false
-          end
-        else
-          to_valid = true
-        end
-
-        #if valid and there's a special price
-        if (from_valid && to_valid && type.special_price)
-          type.price = type.special_price
-          @service_types << type
-          #if there's no special
-        elsif type.default_price
-          type.price = type.default_price
-          @service_types << type
-        end
+        params.require(:service_type).permit(:special_availability, :adult_child_field, :max_adult_occupancy, :max_child_occupancy, :adult_compulsory, :category_id, :name, :max_occupancy, :price, :availability, :description, :default_price, :booking_limit, :booking_limit_bool, :special_price, :available_from, :available_to, :special_mondays, :special_tuesdays, :special_wednesdays, :special_thursdays, :special_fridays, :special_saturdays, :special_sundays, :special_monday_price, :special_tuesday_price, :special_wednesday_price, :special_thursday_price, :special_friday_price, :special_saturday_price, :special_sunday_price, :duration, :multiple_day, service_calendar_attributes: [:day_availability, :day_rate, :date], timeslots_attributes: [:id, :time, :availability, :timeslot_cost, :_destroy], blocked_day_attributes: [:id, :blocked_from_date, :blocked_to_date, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday])
       end
 
       def setPrice(service)
@@ -131,9 +95,9 @@ module Booking
 
         #if not valid and there's a default price
         if (( !from_valid || !to_valid ) && service.default_price) || !service.special_price
-          service.price = service.default_price
+          return service.default_price
         elsif (from_valid || to_valid) && service.special_price
-            service.price = service.special_price
+            return service.special_price
         end
       end
 
@@ -144,6 +108,25 @@ module Booking
           end
         else
           service.duration = nil
+        end
+      end
+
+      #Set availabilities for specials
+      def setCalendarDaySpecialAvailability(service_id)
+        @service = ServiceType.find(service_id)
+        #Delete previous calendar specials
+        ServiceCalendar.where(service_type_id: service_id).delete_all
+
+        #IF there's a special event
+        if (@service.available_from && @service.available_to)
+          #If the special hasn't passed (skip the loop)
+          if(@service.available_to > Date.today)
+            #Set the date for the service calendar
+            (@service.available_from..@service.available_to).each do |special_day|
+              #Create new service calendar associations
+              @service.service_calendars.create!(service_type_id: service_id, date: special_day, day_availability: @service.special_availability)
+            end
+          end
         end
       end
   end

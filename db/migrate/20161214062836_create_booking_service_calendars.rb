@@ -1,11 +1,10 @@
 class CreateBookingServiceCalendars < ActiveRecord::Migration
   def change
     create_table :booking_service_calendars do |t|
-      t.integer :service_type_ID
-      t.integer :availability
-      t.integer :reservation
-      t.float :rate
+      t.integer :day_availability
+      t.float :day_rate
       t.date :date
+      t.integer :service_type_id
 
       t.timestamps null: false
     end

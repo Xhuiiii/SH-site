@@ -1,0 +1,22 @@
+//Clear timeslot options
+$('#timeslot_selection').empty();
+
+//If there are timeslots
+if("<%= @has_slots %>" == "true"){
+  var select = document.createElement('select');
+  select.setAttribute('data-behavior', "timeslot_selected");
+  //Show timeslots associated with the given service
+  "<% @timeslots.each do |t| %>"
+    var time_option = document.createElement('option');
+    time_option.value = "<%= t.id %>";
+    time_option.innerHTML = "<%= t.time.strftime('%I:%M %p') %>";
+    select.appendChild(time_option);
+  "<% end %>"
+  $('#timeslot_selection').append(select);
+}else{
+  //Create a time select
+  var input = document.createElement('input');
+  input.setAttribute('type', 'time');
+  input.setAttribute('data-behavior', "timeslot_selected");
+  $('#timeslot_selection').append(input);
+}

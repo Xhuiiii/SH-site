@@ -1,32 +1,40 @@
+<%= f.hidden_field :occupancy, id: 'occupancy' %>
+<%= f.hidden_field :adult, id: 'adult_occupancy' %>
+<%= f.hidden_field :child, id: 'child_occupancy' %>
+
 <!-- Service is chosen already -->
 <div class="field">
   <strong>Service:</strong> <%= @selected_service.name %><br>
-  <%= f.hidden_field :service_type_id, :value => @selected_service.id %>
+  <%= f.hidden_field :service_type_id, :value => @selected_service.id, id: 'selected_service_id' %>
 </div>
+
+<!-- Unavailable dates -->
+<%= f.hidden_field :unavailable_dates, id: 'unavailable_dates', value: @unavailable_dates %>
+<!-- unavailable days -->
+<%= f.hidden_field :unavailable_days, id: 'unavailable_days', value: @unavailable_days %>
+<!-- multiple_day boolean -->
+<%= f.hidden_field :multiple_day, id: 'multiple_day', value: @multiple_day %>
 
 <div class="field" id="check_in_field">
   <%= f.label :check_in %><br>
-  <%= f.text_field :check_in, :placeholder => Date.today.strftime('%m-%d-%Y'), :class => 'datepicker', :id =>"dpd1" %>
+  <%= f.text_field :check_in, :placeholder => Date.today.strftime('%d %b %Y'), :class => 'datepicker', :id =>"dpd1" %>
 </div>
-<div class="field" id="check_out_field">
-  <%= f.label :check_out %><br>
-  <%= f.text_field :check_out, :placeholder => Date.today.strftime('%m-%d-%Y'), :class => 'datepicker', :id =>"dpd2" %>
-</div>
+<% if @multiple_day == true %>
+  <div class="field" id="check_out_field">
+    <%= f.label :check_out %><br>
+    <%= f.text_field :check_out, :placeholder => Date.today.strftime('%d %b %Y'), :class => 'datepicker', :id =>"dpd2" %>
+  </div>
+<% else %>
+  <div class="field" id="sel_time_field">
+    <%= f.label :time %><br>
+    <div id="timeslot_selection"></div>
+    <%= f.hidden_field :time, id: 'chosen_timeslot' %>
+  </div>
+<% end %>
 <div class="field" id="occupancy_field">
-  <% if @selected_service.adult_child_field %>
-    <%= f.label :adult %><br>
-    <%= f.number_field :adult %><br>
-    <%= f.label :child %><br>
-    <%= f.number_field :child %>
-  <% else %>
-    <%= f.label :persons %><br>
-    <%= f.number_field :occupancy %>
-  <% end %>
 </div>
 
 <% if f.object.persisted? %>
   <%= f.check_box :_destroy %>
   <%= f.label :_destroy, "Destroy" %>
 <% end %>
-
-

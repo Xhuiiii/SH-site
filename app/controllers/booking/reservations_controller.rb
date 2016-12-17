@@ -107,9 +107,12 @@ module Booking
       end
     end
 
+    # 0 availability = fully booked. Nil means not set (no availability limit)
     def getFullyBookedDates(service, unavailable_dates)
       #Get dates that have run out of availability
-      unavailable_dates << ServiceCalendar.where(service_type_id: service.id, day_availability: 0)
+      ServiceCalendar.where(service_type_id: service.id, day_availability: 0).each do |calD|
+        unavailable_dates << calD.date.strftime('%d-%m-%Y')
+      end
     end
 
     #Returns dates unavailable for checkout or checkout end date if applicable

@@ -71,7 +71,7 @@ module Booking
 
       # Only allow a trusted parameter "white list" through.
       def service_type_params
-        params.require(:service_type).permit(:special_availability, :adult_child_field, :max_adult_occupancy, :max_child_occupancy, :adult_compulsory, :category_id, :name, :max_occupancy, :price, :availability, :description, :default_price, :booking_limit, :booking_limit_bool, :special_price, :available_from, :available_to, :special_mondays, :special_tuesdays, :special_wednesdays, :special_thursdays, :special_fridays, :special_saturdays, :special_sundays, :special_monday_price, :special_tuesday_price, :special_wednesday_price, :special_thursday_price, :special_friday_price, :special_saturday_price, :special_sunday_price, :duration, :multiple_day, service_calendar_attributes: [:day_availability, :day_rate, :date], timeslots_attributes: [:id, :time, :availability, :timeslot_cost, :_destroy], blocked_day_attributes: [:id, :blocked_from_date, :blocked_to_date, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday])
+        params.require(:service_type).permit(:special_availability, :adult_child_field, :max_adult_occupancy, :max_child_occupancy, :adult_compulsory, :category_id, :name, :max_occupancy, :price, :availability, :description, :default_price, :booking_limit, :booking_limit_bool, :special_price, :available_from, :available_to, :special_mondays, :special_tuesdays, :special_wednesdays, :special_thursdays, :special_fridays, :special_saturdays, :special_sundays, :special_monday_price, :special_tuesday_price, :special_wednesday_price, :special_thursday_price, :special_friday_price, :special_saturday_price, :special_sunday_price, :duration, :multiple_day, service_calendar_attributes: [:special_availability, :normal_availability, :day_availability, :day_rate, :date], timeslots_attributes: [:id, :time, :availability, :timeslot_cost, :_destroy], blocked_day_attributes: [:id, :blocked_from_date, :blocked_to_date, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday])
       end
 
       def setPrice(service)
@@ -112,6 +112,7 @@ module Booking
       end
 
       #Set availabilities for specials
+      # 0 availability = fully booked. Nil means not set (no availability limit)
       def setCalendarDaySpecialAvailability(service_id)
         @service = ServiceType.find(service_id)
         #Delete previous calendar specials
@@ -123,8 +124,10 @@ module Booking
           if(@service.available_to > Date.today)
             #Set the date for the service calendar
             (@service.available_from..@service.available_to).each do |special_day|
+              normal_availability = @service.availability
+              day_availability = (normal_availability || 0) + (@service.special_availability || 0)
               #Create new service calendar associations
-              @service.service_calendars.create!(service_type_id: service_id, date: special_day, day_availability: @service.special_availability)
+              @service.service_calendars.create!(service_type_id: service_id, date: special_day, special_availability: @service.special_availability, normal_availability: normal_availability, day_availability: day_availability)
             end
           end
         end

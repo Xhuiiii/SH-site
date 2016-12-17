@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161214062836) do
+ActiveRecord::Schema.define(version: 20161217081407) do
 
   create_table "booking_blocked_days", force: :cascade do |t|
     t.date    "blocked_from_date"
@@ -65,8 +65,10 @@ ActiveRecord::Schema.define(version: 20161214062836) do
     t.float    "day_rate"
     t.date     "date"
     t.integer  "service_type_id"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.integer  "special_availability"
+    t.integer  "normal_availability"
   end
 
   create_table "booking_service_type_reservations", force: :cascade do |t|

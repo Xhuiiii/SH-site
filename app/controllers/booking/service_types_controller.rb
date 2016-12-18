@@ -8,7 +8,11 @@ module Booking
     def index
       #Check for date valid services
       @service_types = []
-      @service_types = ServiceType.all
+      if (params[:category_id])
+        @service_types = ServiceType.where(category_id: params[:category_id])
+      else
+        @service_types = ServiceType.all
+      end
     end
 
     # GET /service_types/1

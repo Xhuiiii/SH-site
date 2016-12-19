@@ -11,13 +11,13 @@
 <body class="<%= controller_name %> <%= action_name %>">
 	<div class="container">
 		<ul class="nav nav-tabs">
-			<li><%= link_to "My Categories", root_path %></li>
-			<li><%= link_to "Calendar", service_calendars_path %></li>
-			<li><%= link_to "Reservations", reservations_path %></li>
-			<li><%= link_to "Customers", customers_path %></li>
-			<li><%= link_to "Book", service_types_path %></li>
+			<li><%= link_to "My Categories", (booking||self).categories_path %></li>
+			<li><%= link_to "Calendar", (booking||self).service_calendars_path %></li>
+			<li><%= link_to "Reservations", (booking||self).reservations_path %></li>
+			<li><%= link_to "Customers", (booking||self).customers_path %></li>
+			<li><%= link_to "Book", (booking||self).service_types_path %></li>
 			<% Booking::Category.all.each do |category| %>
-			<li><%= link_to category.name, service_types_path(category_id: category.id) %></li>
+			<li><%= link_to category.name, (booking||self).service_types_path(category_id: category.id) %></li>
 			<% end %>
 		</ul>
 

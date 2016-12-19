@@ -1,4 +1,14 @@
 Booking::Engine.routes.draw do
+  devise_for :users, {
+    class_name: "Booking::User",
+    module: :devise,
+    controllers: {
+      sessions: "users/sessions",
+      registrations: "users/registrations",
+      passwords: "users/passwords"
+    }
+  }
+
   resources :customers
   resources :todays_bookings
   get 'reservations/display_prices', as: 'display_prices'
@@ -19,6 +29,5 @@ Booking::Engine.routes.draw do
   end
   resources :service_types, only: :index
 
-  root to: "categories#index"
-
+  root :to => "booking/categories#index"
 end

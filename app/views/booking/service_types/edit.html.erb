@@ -1,6 +1,8 @@
-<h1>Edit Service</h1>
+<% present @service_type do |service_type_presenter| %>
+  <h1>Edit Service</h1>
 
-<%= render 'form' %>
+  <%= render 'form' %>
 
-<%= link_to 'Show', [@category, @service_type] %> |
-<%= link_to 'Back', service_types_path %>
+  <%= link_to 'Show', [@category, @service_type] %> |
+  <%= link_to 'Back', service_types_path %>
+<% end %>

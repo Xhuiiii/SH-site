@@ -9,6 +9,10 @@ module Booking
     accepts_nested_attributes_for :customer_reservation
   	has_one :customer, through: :customer_reservation
 
+    has_one :user_reservation, dependent: :destroy
+    accepts_nested_attributes_for :user_reservation
+    has_one :user, through: :user_reservation
+
     #validate :end_date_after_start_date?
 
   	# def end_date_after_start_date?

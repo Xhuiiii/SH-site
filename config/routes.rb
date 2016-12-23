@@ -29,5 +29,5 @@ Booking::Engine.routes.draw do
   end
   resources :service_types, only: :index
 
-  root :to => "booking/categories#index"
+  root to: "booking/categories#index"
 end

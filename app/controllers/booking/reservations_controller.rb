@@ -463,10 +463,10 @@ module Booking
       @reservation = Reservation.new(reservation_params)
 
       if @reservation.save
-        if (!@reservation.customer.present?)
-          redirect_to new_customer_path(reservation_id: @reservation.id), notice: 'Reservation was successfully created.'
+        if (!current_user)
+          redirect_to new_user_registration_path(reservation_id: @reservation.id), notice: 'Reservation was successfully created.'
         else
-          redirect_to @reservation.customer
+          redirect_to @reservation
         end
       else
         render :new

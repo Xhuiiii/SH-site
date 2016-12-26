@@ -1,7 +1,7 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
 
-$(".reservations").ready(function(){
+$(".service_type_reservations").ready(function(){
   //Get selected service (Service chosen first)
   var selected_service_id = document.getElementById('selected_service_id');
   //Get service select field (Category chosen first)

@@ -1,0 +1,33 @@
+<%= form_for @service_type_reservation, :url => add_to_reservation_path, :html => {:method => :post} do |f| %>
+  <% if @service_type_reservation.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@service_type_reservation.errors.count, "error") %> prohibited this service type reservation from being saved:</h2>
+      <ul>
+      <% @service_type_reservation.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- If editing an existing reservation -->
+  <% if @existing_reservation %>
+    <%= render 'booking/service_type_reservations/service_type_reservation_fields', f: f %>
+  <!-- If a service is chosen first -->
+  <% elsif params[:service_type_id] %>
+    <%= render 'booking/service_type_reservations/service_type_reservation_fields', f: f %>
+  <!-- If category is provided, show categories' services -->
+  <% elsif params[:category_id] %>
+    <!-- If category is single day -->
+    <% if !Booking::Category.find(params[:category_id]).multiple_day %>
+      <%= render 'booking/service_type_reservations/single_day_form', f: f %>
+    <!-- If category is multiple day -->
+    <% else %>
+      <%= render 'booking/service_type_reservations/multiple_day_form', f: f %>
+    <% end %>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit "Add to reservations" %>
+  </div>
+<% end %>

@@ -1,59 +1,31 @@
 <!-- Confirmation page -->
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Reservation id:</strong>
-  <%= @reservation.id %>
-</p>
-
-<p>
-  <strong>Total price:</strong>
-  $<%= @reservation.total_price %>
-</p>
-
-<% @single_reservations.each do |single_res| %>
-  <p>
-    <strong>Service:</strong>
-    <%= single_res.service_type.name %>
-  </p>
-
-  <p>
-    <strong>Occupancy:</strong>
-    <%= single_res.occupancy %>
-  </p>
-
-  <% if Booking::Category.find(single_res.service_type.category_id).multiple_day %>
-    <p>
-      <strong>Check in:</strong>
-      <%= single_res.check_in.to_date %>
-    </p>
-
-    <p>
-      <strong>Check out:</strong>
-      <%= single_res.check_out.to_date %>
-    </p>
-  <% else %>
-    <p>
-      <strong>Date:</strong>
-      <%= single_res.date %>
-    </p>
-  <% end %>
-
-  <p>
-    <strong>Price:</strong>
-    $<%= single_res.single_res_price %>
-  </p>
-
-  <%= link_to 'Edit Reservation', edit_reservation_path(reservation_id: single_res.reservation_id, single_service_reservation_id: single_res.id) %>
-<% end %> | 
-
-  <%= link_to 'Add Reservation', new_reservation_service_type_reservation_path(reservation_id: @reservation.id) %> |
-
-
-<%= link_to 'Add Customer info', new_customer_path(reservation_id: @reservation.id) %><br>
-<% if @hasCustomer %>
-  <%= @reservation.customer.first_name%>
-  <%= @reservation.customer.last_name %>
-  <%= link_to 'Edit Customer info', edit_customer_path(@reservation.customer) %>
+<% unless @reservation.service_type_reservations.any? %>
+  <p>You don't have any items in your cart. <%= link_to "Go Add Some", service_types_path %>
 <% end %>
 
+<table width="100%">
+  <tr>
+    <th>Product</th>
+    <th>Price</th>
+  </tr>
+  <% for line_item in @reservation.service_type_reservations %>
+    <tr>
+      <td><%= line_item.service_type.name %></td>
+      <td><%= number_to_currency line_item.price %></td>
+      <td><%= link_to "Remove", remove_from_reservation_path(line_item), :method => :post %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td>Total:</td>
+    <td><%= number_to_currency @reservation.total_price %></td>
+  </tr>
+</table>
+
+<hr />
+<!-- # < % = form_tag checkout_path, do |f| %>
+#   < % = link_to "Continue Shopping", root_path %>
+#   or
+#   < % = submit_tag "Checkout" %>
+# < % end %> -->

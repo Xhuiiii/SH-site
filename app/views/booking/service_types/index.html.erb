@@ -27,7 +27,7 @@
         <% else %>
           <td></td>
         <% end %>
-        <td><%= link_to 'Book', new_reservation_path(service_type_id: service_type.id) %></td>
+        <td><%= link_to 'Book', new_service_type_reservation_path(service_type_id: service_type.id) %></td>
         <td><%= link_to 'Show', category_service_type_path(category_id: service_type.category_id, id: service_type.id) %></td>
         <td><%= link_to 'Edit', edit_category_service_type_path(category_id: service_type.category_id, id: service_type.id) %></td>
         <td><%= link_to 'Destroy', [Booking::Category.find(service_type.category_id), service_type], method: :delete, data: { confirm: 'Are you sure?' } %></td>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161226113027) do
+ActiveRecord::Schema.define(version: 20161227140932) do
 
   create_table "booking_blocked_days", force: :cascade do |t|
     t.date    "blocked_from_date"
@@ -24,6 +24,15 @@ ActiveRecord::Schema.define(version: 20161226113027) do
     t.boolean "saturday"
     t.boolean "sunday"
     t.integer "service_type_id"
+  end
+
+  create_table "booking_calendar_day_timeslots", force: :cascade do |t|
+    t.time     "time"
+    t.integer  "availability"
+    t.float    "timeslot_cost"
+    t.integer  "service_calendar_id"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
   end
 
   create_table "booking_categories", force: :cascade do |t|

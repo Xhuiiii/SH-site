@@ -398,12 +398,50 @@ module Booking
     end
 
     def display_timeslots
-      @service_calendar = ServiceCalendar.where(service_type_id: params[:service_type_id], date: params[:query_date])
-      @timeslots = @service_calendar.timeslots
-      if (@timeslots.length > 0)
+      date = params[:query_date]
+      @service_type = ServiceType.find(params[:service_type_id])
+      @all_timeslots = @service_type.timeslots
+
+      @has_slots = false
+      if (@all_timeslots.length > 0)
         @has_slots = true
       else
+        #No timeslots so show time select
         @has_slots = false
+      end
+
+      if (@has_slots == true)
+        #Find service calendar with given date
+        @service_calendar = ServiceCalendar.where(service_type_id: @service_type.id, date: date).first
+
+        #If a service calendar isn't already created for that date
+        if (!@service_calendar)
+          #Check if special availability
+          availability = @service_type.availability || 0
+          special_availability = 0
+          d = date.to_date
+          if(@service_type.available_from && @service_type.available_to)
+            if(d >= @service_type.available_from.to_date && d <= @service_type.available_to.date)
+              special_availability = @service_type.special_availability
+            end
+          end
+          total_availability = availability + special_availability
+          @service_calendar = ServiceCalendar.create(service_type_id: @service_type.id, day_availability: total_availability, special_availability: special_availability, normal_availability: availability, date: date)
+          @service_calendar.save
+
+          #Get timeslots
+          @all_timeslots.each do |t|
+            @service_calendar.calendar_day_timeslots.build(time: t.time, availability: t.availability, timeslot_cost: t.timeslot_cost)
+            @service_calendar.save
+          end
+        end
+        #Check if timeslots are available
+        @timeslots = []
+        @service_calendar.calendar_day_timeslots.each do |t|
+          if(t.availability && t.availability > 0)
+            @timeslots << t
+          end
+        end
       end
     end
 

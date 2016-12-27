@@ -3,7 +3,6 @@ require_dependency "booking/application_controller"
 module Booking
   class ServiceTypesController < ApplicationController
     before_action :set_service_type, only: [:show, :edit, :update, :destroy]
-
     # GET /service_types
     def index
       #Check for date valid services

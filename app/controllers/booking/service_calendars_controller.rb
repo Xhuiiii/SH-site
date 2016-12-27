@@ -54,7 +54,7 @@ module Booking
 
       # Only allow a trusted parameter "white list" through.
       def service_calendar_params
-        params.require(:service_calendar).permit(:service_type_id, :day_availability, :day_rate, :date)
+        params.require(:service_calendar).permit(:service_type_id, :day_availability, :special_availability, :normal_availability, :day_rate, :date, calendar_day_timeslots_attributes: [:id, :time, :availability, :timeslot_cost, :service_type_id, :service_calendar_id, :_destroy])
       end
   end
 end

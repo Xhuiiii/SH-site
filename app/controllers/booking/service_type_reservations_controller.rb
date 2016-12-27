@@ -431,7 +431,7 @@ module Booking
 
           #Get timeslots
           @all_timeslots.each do |t|
-            @service_calendar.calendar_day_timeslots.build(time: t.time, availability: t.availability, timeslot_cost: t.timeslot_cost)
+            @service_calendar.calendar_day_timeslots.build(time: t.time, availability: t.availability, timeslot_cost: t.timeslot_cost, servicetype_timeslot_id: t.id)
             @service_calendar.save
           end
         end

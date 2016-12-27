@@ -5,10 +5,20 @@ $('#timeslot_selection').empty();
 if("<%= @has_slots %>" == "true"){
   var select = document.createElement('select');
   select.setAttribute('data-behavior', "timeslot_selected");
+console.log("<%= @timeslots.size %>");
+  if("<%= @timeslots.size %>" <= 0){
+    var no_timeslots_available = document.createElement('option');
+    no_timeslots_available.innerHTML = "No timeslots available";
+    select.appendChild(no_timeslots_available);
+  }else{
+    var select_time = document.createElement('option');
+    select_time.innerHTML = "Select time";
+    select.appendChild(select_time);
+  }
   //Show timeslots associated with the given service
   "<% @timeslots.each do |t| %>"
     var time_option = document.createElement('option');
-    time_option.value = "<%= t.id %>";
+    time_option.value = "<%= t.servicetype_timeslot_id %>";
     time_option.innerHTML = "<%= t.time.strftime('%I:%M %p') %>";
     select.appendChild(time_option);
   "<% end %>"

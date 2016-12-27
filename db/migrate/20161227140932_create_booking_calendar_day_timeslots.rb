@@ -5,6 +5,7 @@ class CreateBookingCalendarDayTimeslots < ActiveRecord::Migration
     	t.integer :availability
       t.float :timeslot_cost
     	t.integer :service_calendar_id
+      t.integer :servicetype_timeslot_id
       t.timestamps null: false
     end
   end

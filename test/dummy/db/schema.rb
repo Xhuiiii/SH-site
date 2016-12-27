@@ -31,8 +31,9 @@ ActiveRecord::Schema.define(version: 20161227140932) do
     t.integer  "availability"
     t.float    "timeslot_cost"
     t.integer  "service_calendar_id"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
+    t.integer  "servicetype_timeslot_id"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   create_table "booking_categories", force: :cascade do |t|

@@ -19,17 +19,21 @@ module Booking
       occupancy = params[:service_type_reservation][:occupancy]
       adult = params[:service_type_reservation][:adult]
       child = params[:service_type_reservation][:child]
+      date = params[:service_type_reservation][:date]
       price = 0
       #Calculate price
       if(!check_out && check_in)
         price = getPrice(service_type_id, check_in, time)
+      elsif(date)
+        price = getPrice(service_type_id, date, time)
       else
-        (check_in.to_date..(check_out.to_date - 1.days)).each do |d|
+        till_day = (check_out.to_date - 1.days)
+        (check_in.to_date..till_day).each do |d|
           price += getPrice(service_type_id, d, time)
         end
       end
 
-      @reservation.service_type_reservations.create(reservation_id: @reservation.id, service_type_id: service_type_id, price: price, check_in: check_in, check_out: check_out, time: time, occupancy: occupancy, adult: adult, child: child)
+      @reservation.service_type_reservations.create(reservation_id: @reservation.id, service_type_id: service_type_id, price: price, check_in: check_in, check_out: check_out, date: date, time: time, occupancy: occupancy, adult: adult, child: child)
 
       @reservation.recalculate_price!
       flash[:notice] = "Service added to cart."

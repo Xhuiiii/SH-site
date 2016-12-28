@@ -276,7 +276,7 @@ module Booking
     # Service selection for multiple day category
     def display_multiple_day_services
       @check_in = Date.parse(params[:check_in])
-      @check_out = Date.parse(params[:check_out])
+      @check_out = Date.parse(params[:check_out]) - 1.days
 
       #Find available services
       @services = []

@@ -5,7 +5,6 @@ $('#timeslot_selection').empty();
 if("<%= @has_slots %>" == "true"){
   var select = document.createElement('select');
   select.setAttribute('data-behavior', "timeslot_selected");
-console.log("<%= @timeslots.size %>");
   if("<%= @timeslots.size %>" <= 0){
     var no_timeslots_available = document.createElement('option');
     no_timeslots_available.innerHTML = "No timeslots available";

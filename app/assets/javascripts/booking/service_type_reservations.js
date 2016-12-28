@@ -159,6 +159,7 @@ $(".service_type_reservations").ready(function(){
   //When a radio button is selected
   $(document).on('change', "[data-behavior~=service_selected]", function(){
     //Set the service type id to the selected service value
+    var service_type_id = document.getElementById('service_type_id');
     service_type_id.value = this.value;
     var multiple_day = document.getElementById('multiple_day');
 
@@ -167,7 +168,7 @@ $(".service_type_reservations").ready(function(){
       if (sel_time_field){
         sel_time_field.style.display = 'block';
       }
-      $.get("display_timeslots", {service_type_id : this.value})
+      $.get("display_timeslots", {service_type_id : this.value, query_date: checkin.getDate()})
       .error(function(XMLHttpRequest, textStatus, errorThrown){
         console.log(XMLHttpRequest.responseText + textStatus + errorThrown)
       });

@@ -107,19 +107,20 @@ $(".service_type_reservations").ready(function(){
       next_day_date.setDate(next_day_date.getDate() + 1);
     }
     var newEndDate;
-    //Gets array of disabled checkout dates (if any)
-    $.get("get_checkout_dates", {service_type_id : selected_service_id.value, next_day : next_day_date})
-    .success(function(data){
-      newEndDate = new Date(data);
-      //Check if newEndDate is valid date object
-      if(newEndDate instanceof Date && !isNaN(newEndDate.valueOf())){
-        $('#dpd2').datepicker('setEndDate', newEndDate);
-      }
-    })
-    .error(function(XMLHttpRequest, textStatus, errorThrown){
-      console.log(XMLHttpRequest.responseText + textStatus + errorThrown);
-    });
-
+    if(selected_service_id){
+      //Gets array of disabled checkout dates (if any)
+      $.get("get_checkout_dates", {service_type_id : selected_service_id.value, next_day : next_day_date})
+      .success(function(data){
+        newEndDate = new Date(data);
+        //Check if newEndDate is valid date object
+        if(newEndDate instanceof Date && !isNaN(newEndDate.valueOf())){
+          $('#dpd2').datepicker('setEndDate', newEndDate);
+        }
+      })
+      .error(function(XMLHttpRequest, textStatus, errorThrown){
+        console.log(XMLHttpRequest.responseText + textStatus + errorThrown);
+      });
+    }
     checkout.hide();
   }).on('show', function(ev){
     //If the first datepicker has a value

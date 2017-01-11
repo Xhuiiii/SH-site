@@ -5,6 +5,12 @@ module Booking
     before_action :get_reservation_value
 
     def show
+      #Show previously added items & add new items to res if just signed in
+      @existing_res = @reservation
+      if user_signed_in? && current_user.reservation
+        @reservation = current_user.reservation
+      end
+      @reservation.recalculate_price!
     end
 
     def add
@@ -15,27 +21,35 @@ module Booking
       service_type_id = params[:service_type_reservation][:service_type_id]
       check_in = params[:service_type_reservation][:check_in]
       check_out = params[:service_type_reservation][:check_out]
-      time = params[:service_type_reservation][:time]
+      time_id = params[:service_type_reservation][:time_id]
       occupancy = params[:service_type_reservation][:occupancy]
       adult = params[:service_type_reservation][:adult]
       child = params[:service_type_reservation][:child]
-      date = params[:service_type_reservation][:date]
+
+      #Get time
+      if(time_id)
+        time = Timeslot.find(time_id).time
+      end
+
       price = 0
       #Calculate price
+      #If only checkin
       if(!check_out && check_in)
-        price = getPrice(service_type_id, check_in, time)
-      elsif(date)
-        price = getPrice(service_type_id, date, time)
+        price = getPrice(service_type_id, check_in, time_id)
       else
         till_day = (check_out.to_date - 1.days)
         (check_in.to_date..till_day).each do |d|
-          price += getPrice(service_type_id, d, time)
+          price += getPrice(service_type_id, d, time_id)
         end
       end
 
-      @reservation.service_type_reservations.create(reservation_id: @reservation.id, service_type_id: service_type_id, price: price, check_in: check_in, check_out: check_out, date: date, time: time, occupancy: occupancy, adult: adult, child: child)
+      @reservation.service_type_reservations.create(reservation_id: @reservation.id, service_type_id: service_type_id, price: price, check_in: check_in, check_out: check_out, time_id: time_id, time: time, occupancy: occupancy, adult: adult, child: child, paid: false)
 
       @reservation.recalculate_price!
+      if user_signed_in?
+        current_user.reservation = @reservation
+        current_user.save
+      end
       flash[:notice] = "Service added to cart."
       redirect_to reservations_path
     end

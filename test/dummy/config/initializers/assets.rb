@@ -9,6 +9,7 @@ Rails.application.config.assets.precompile += %w( booking/customers.js )
 Rails.application.config.assets.precompile += %w( booking/service_calendars.js )
 Rails.application.config.assets.precompile += %w( booking/todays_bookings.js )
 Rails.application.config.assets.precompile += %w( booking/service_type_reservations.js )
+Rails.application.config.assets.precompile += %w( booking/charges.js )
 
 Rails.application.config.assets.precompile += %w( users/registrations.js )
 Rails.application.config.assets.precompile += %w( users/sessions.js )

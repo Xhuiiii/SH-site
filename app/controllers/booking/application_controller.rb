@@ -5,15 +5,22 @@
 
 module Booking
   class ApplicationController < ActionController::Base
+    def after_sign_in_path_for(resource)
+      (booking||self).reservations_path
+    end
+
+    def after_sign_out_path_for(resource)
+      (booking||self).categories_path
+    end
     #Takes a service type, date, and optional time.
     #Returns price for that day/timeslot
-    def getPrice(service_type_id, date, time)
+    def getPrice(service_type_id, date, time_id)
       service_type = ServiceType.find(service_type_id)
       price = nil
 
       #If there's a time
-      if(time)
-        timeslot = service_type.timeslots.find(time)
+      if(time_id && time_id.present?)
+        timeslot = service_type.timeslots.find(time_id)
         if (timeslot.timeslot_cost)
           price = timeslot.timeslot_cost
         else
@@ -22,10 +29,13 @@ module Booking
       #Using date
       else
         d = date.to_date
+        d.change(hour: 0)
         #If there's a special price
         if service_type.special_price
           #Check if date falls between special
-          if (d >= service_type.available_from.to_date && d <= service_type.available_from.to_date)
+          special_start = service_type.available_from.to_date.change(hour: 0)
+          special_end = service_type.available_to.to_date.change(hour: 0)
+          if (d >= special_start && d <= special_end)
             price = service_type.special_price
           end
         end

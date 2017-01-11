@@ -1,18 +1,27 @@
 <!-- Confirmation page -->
 <p id="notice"><%= notice %></p>
 
-<% unless @reservation.service_type_reservations.any? %>
+<% unless @reservation.service_type_reservations.where(paid: false).any? %>
   <p>You don't have any items in your cart. <%= link_to "Go Add Some", service_types_path %>
 <% end %>
 
 <table width="100%">
+  <h4>Cart items</h4>
   <tr>
     <th>Product</th>
+    <th>Booking dates</th>
     <th>Price</th>
   </tr>
-  <% for line_item in @reservation.service_type_reservations %>
+  <% @reservation.service_type_reservations.where(paid: false).each do |line_item| %>
     <tr>
       <td><%= line_item.service_type.name %></td>
+      <% if line_item.check_out %>
+        <td><%= line_item.check_in.strftime('%d %b %Y') %> - <%= line_item.check_out.strftime('%d %b %Y') %></td>
+      <% elsif line_item.time %>
+        <td><%= line_item.check_in.strftime('%d %b %Y') %> - <%= line_item.time.strftime('%I:%M %p') %></td>
+      <% else %>
+        <td><%= line_item.check_in.strftime('%d %b %Y') %></td>
+      <% end %>
       <td><%= number_to_currency line_item.price %></td>
       <td><%= link_to "Remove", remove_from_reservation_path(line_item), :method => :post %></td>
     </tr>
@@ -22,10 +31,35 @@
     <td><%= number_to_currency @reservation.total_price %></td>
   </tr>
 </table>
-
 <hr />
-<!-- # < % = form_tag checkout_path, do |f| %>
-#   < % = link_to "Continue Shopping", root_path %>
-#   or
-#   < % = submit_tag "Checkout" %>
-# < % end %> -->
+
+<table width="100%">
+  <h4>Paid items</h4>
+  <tr>
+    <th>Product</th>
+    <th>Booking dates</th>
+    <th>Price</th>
+  </tr>
+  <% @reservation.service_type_reservations.where(paid: true).each do |line_item| %>
+    <tr>
+      <td><%= line_item.service_type.name %></td>
+      <% if line_item.check_out %>
+        <td><%= line_item.check_in.strftime('%d %b %Y') %> - <%= line_item.check_out.strftime('%d %b %Y') %></td>
+      <% elsif line_item.time %>
+        <td><%= line_item.check_in.strftime('%d %b %Y') %> - <%= line_item.time.strftime('%I:%M %p') %></td>
+      <% else %>
+        <td><%= line_item.check_in.strftime('%d %b %Y') %></td>
+      <% end %>
+      <td><%= number_to_currency line_item.price %></td>
+    </tr>
+  <% end %>
+</table>
+<hr />
+
+  <%= link_to "Continue Shopping", root_path %>
+  or
+  <% if user_signed_in? %>
+    <%= link_to "Checkout", new_charge_path(amount: @reservation.total_price, reservation_id: @reservation.id) %>
+  <% else %>
+    <%= link_to "Continue", new_user_registration_path %>
+  <% end %>

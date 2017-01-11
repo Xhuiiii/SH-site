@@ -7,6 +7,10 @@
   <%= stylesheet_link_tag    "booking/application", media: "all" %>
   <%= javascript_include_tag "booking/application" %>
   <%= csrf_meta_tags %>
+  <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+  <script type="text/javascript">
+    Stripe.setPublishableKey('pk_test_S2t032hKRrf0l0rGu3EcQNDW');
+  </script>
 </head>
 <body class="<%= controller_name %> <%= action_name %>">
 	<div class="container">

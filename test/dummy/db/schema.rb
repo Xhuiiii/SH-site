@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161227140932) do
+ActiveRecord::Schema.define(version: 20170111130020) do
 
   create_table "booking_blocked_days", force: :cascade do |t|
     t.date    "blocked_from_date"
@@ -39,6 +39,11 @@ ActiveRecord::Schema.define(version: 20161227140932) do
   create_table "booking_categories", force: :cascade do |t|
     t.boolean "multiple_day"
     t.string  "name"
+  end
+
+  create_table "booking_charges", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "booking_customer_reservations", force: :cascade do |t|
@@ -94,8 +99,10 @@ ActiveRecord::Schema.define(version: 20161227140932) do
     t.integer  "reservation_id"
     t.integer  "adult"
     t.integer  "child"
-    t.time     "time"
     t.float    "price"
+    t.boolean  "paid"
+    t.integer  "time_id"
+    t.time     "time"
   end
 
   create_table "booking_service_types", force: :cascade do |t|

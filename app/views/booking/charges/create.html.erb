@@ -1,0 +1,7 @@
+Thanks for paying!<br>
+<% @reservation.service_type_reservations.each do |ser|%>
+  ID: <%= ser.id %><br>
+  Service type id: <%= ser.service_type_id %><br>
+  Reservation id: <%= ser.reservation_id %><br>
+  Paid: <%= ser.paid %>
+<% end %>

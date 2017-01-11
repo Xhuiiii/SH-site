@@ -1,7 +1,7 @@
 <%= f.hidden_field :multiple_day, :value => false, id: 'multiple_day' %>
 <%= f.hidden_field :category_id, :value => params[:category_id], id: 'category_id' %>
 <%= f.hidden_field :service_type_id, id: 'service_type_id' %>
-<%= f.hidden_field :time, id: 'chosen_timeslot' %>
+<%= f.hidden_field :time_id, id: 'chosen_timeslot' %>
 <%= f.hidden_field :occupancy, id: 'occupancy' %>
 <%= f.hidden_field :adult, id: 'adult_occupancy' %>
 <%= f.hidden_field :child, id: 'child_occupancy' %>
@@ -10,7 +10,7 @@
 <div class="field" id="sel_date_field">
   <%= f.label :date %><br>
   <div class="field" id="datepicker">
-  <%= f.text_field :date, :placeholder => Date.today.strftime('%d %b %Y'), :class => 'datepicker', :id =>"dpd1" %>
+  <%= f.text_field :check_in, :placeholder => Date.today.strftime('%d %b %Y'), :class => 'datepicker', :id =>"dpd1" %>
   </div>
 </div>
 

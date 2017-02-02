@@ -7,8 +7,10 @@ module Booking
     # GET /service_calendars
     def index
       @service_calendars = ServiceCalendar.all
-      @service_type_reservations = ServiceTypeReservation.all
+      @service_type_reservations = ServiceTypeReservation.all.where(paid: true)
       @reservations = Reservation.all
+      @service_types = ServiceType.all
+      @customers = Customer.all
     end
 
     # GET /service_calendars/1

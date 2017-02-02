@@ -8,7 +8,14 @@ class Users::SessionsController < Devise::SessionsController
 
   # POST /resource/sign_in
   def create
-    super
+    #super
+    user = User.find_by_email(params[:email])
+    if user && user.authenticate(params[:password])
+      session[:user_id] = user.id
+      redirect_to admin_url, notice: "Successfully logged in."
+    else
+      flash.now.alert = "Email or password invalid. "
+    end
   end
 
   # DELETE /resource/sign_out

@@ -87,10 +87,10 @@ module Booking
     end
 
     # 0 availability = fully booked. Nil means not set (no availability limit)
-    def getFullyBookedDates(service, unavailable_dates)
+    def getFullyBookedDates(service, fully_booked_dates)
       #Get dates that have run out of availability
       ServiceCalendar.where(service_type_id: service.id, day_availability: 0).each do |calD|
-        unavailable_dates << calD.date.strftime('%d-%m-%Y')
+        fully_booked_dates << calD.date.strftime('%d-%m-%Y')
       end
     end
 
@@ -240,7 +240,6 @@ module Booking
       end
     end
 
-
     #Displays prices for available services
     def display_prices
       @service_type = ServiceType.find(params[:service_type_id])
@@ -310,6 +309,25 @@ module Booking
             @blocked = true
           elsif (d.sunday? && s.blocked_day.sunday)
             @blocked = true
+          end
+
+          #check if fully booked
+          #Find service calendar with given date
+          @service_calendar = ServiceCalendar.where(service_type_id: @service_type.id, date: d).first
+
+          #If a service calendar isn't already created for that date
+          if (!@service_calendar)
+            #Check if special availability
+            availability = s.availability || 0
+            special_availability = 0
+            if(s.available_from && s.available_to)
+              if(d >= s.available_from.to_date && d <= s.available_to.date)
+                special_availability = s.special_availability
+              end
+            end
+            total_availability = availability + special_availability
+            @service_calendar = ServiceCalendar.create(service_type_id: s.id, day_availability: total_availability, special_availability: special_availability, normal_availability: availability, date: date)
+            @service_calendar.save
           end
         end
 

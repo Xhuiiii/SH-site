@@ -3,6 +3,7 @@ require_dependency "booking/application_controller"
 module Booking
   class CustomersController < ApplicationController
     before_action :set_customer, only: [:show, :edit, :update, :destroy]
+    before_action :get_customer, only: [:new]
 
     # GET /customers
     def index
@@ -34,7 +35,8 @@ module Booking
       @customer = Customer.new(customer_params)
       @reservation.customer = @customer
       if @reservation.customer.save
-        redirect_to @customer, notice: 'Customer was successfully created.'
+        session[:customer_id] = @customer.id
+        redirect_to new_charge_path(amount: @reservation.total_price, reservation_id: @reservation.id)
       else
         render :new
       end
@@ -43,7 +45,9 @@ module Booking
     # PATCH/PUT /customers/1
     def update
       if @customer.update(customer_params)
-        redirect_to @customer, notice: 'Customer was successfully updated.'
+        session[:customer_id] = @customer.id
+        @reservation = Reservation.find(@customer.reservation.id)
+        redirect_to new_charge_path(amount: @reservation.total_price, reservation_id: @reservation.id)
       else
         render :edit
       end
@@ -54,12 +58,22 @@ module Booking
       @customer.destroy
       redirect_to customers_url, notice: 'Customer was successfully destroyed.'
     end
-    
+
 
     private
       # Use callbacks to share common setup or constraints between actions.
       def set_customer
         @customer = Customer.find(params[:id])
+      end
+
+      def get_customer
+        if session[:customer_id].nil?
+          @customer = Customer.create
+          session[:customer_id] = @customer.id
+          @customer
+        else
+          @customer = Customer.find(session[:customer_id])
+        end
       end
 
       # Only allow a trusted parameter "white list" through.

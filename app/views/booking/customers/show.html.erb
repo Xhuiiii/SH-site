@@ -7,11 +7,7 @@
       Service: <%= Booking::ServiceType.find(single_res.service_type_id).name %><br>
       Check in: <%= single_res.check_in %><br>
       Check out: <%= single_res.check_out %><br>
-      <%= link_to 'Edit reservation', edit_reservation_path(id: single_res.reservation_id, single_service_reservation_id: single_res) %><br>
-      <%= link_to 'Delete reservation', reservation_service_type_reservation_path(reservation_id: single_res.reservation_id ,id: single_res.id) , method: :delete, data: {confirm: 'Are you sure?'} %><br>
     <% end %>
-  <% else %>
-    <%= link_to 'New Reservation', new_reservation_path(customer_id: @customer.id) %>
   <% end %>
 </p>
 
@@ -66,5 +62,4 @@
 </p>
 
 <%= link_to 'Edit customer info', edit_customer_path(@customer) %> |
-<%= link_to 'Back', customers_path %> |
-<%= link_to 'Book', new_reservation_path %>
+<%= link_to 'Confirm and pay', new_charge_path(amount: @customer.reservation.total_price, reservation_id: @customer.reservation.id) %> 

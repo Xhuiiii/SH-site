@@ -1,8 +1,4 @@
 Booking::Engine.routes.draw do
-  get "reservations" => 'reservations#show'
-  post "reservation/add" => "reservations#add", :as => :add_to_reservation
-  post "reservation/remove/:id" => "reservations#remove", :as => :remove_from_reservation
-
   devise_for :users, {
     class_name: "Booking::User",
     module: :devise,
@@ -12,9 +8,22 @@ Booking::Engine.routes.draw do
       passwords: "users/passwords"
     }
   }
+  
+  namespace :admin do
+    get '', to: 'dashboard#index', as: '/'
+    resources :categories
+    resources :categories do
+      resources :service_types, except: :index
+    end
+    resources :service_types, only: :index
+    resources :reservations
+  end
+
+  get "reservations" => 'reservations#show'
+  post "reservation/add" => "reservations#add", :as => :add_to_reservation
+  post "reservation/remove/:id" => "reservations#remove", :as => :remove_from_reservation
 
   resources :charges, only: [:new, :create]
-  get 'thanks', to: 'charges#thanks', as: 'thanks'
 
   resources :customers
   resources :todays_bookings

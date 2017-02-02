@@ -28,6 +28,7 @@
   <% end %>
   <tr>
     <td>Total:</td>
+    <td></td>
     <td><%= number_to_currency @reservation.total_price %></td>
   </tr>
 </table>
@@ -56,10 +57,10 @@
 </table>
 <hr />
 
-  <%= link_to "Continue Shopping", root_path %>
+  <%= link_to "Continue Shopping", service_types_path %>
   or
-  <% if user_signed_in? %>
-    <%= link_to "Checkout", new_charge_path(amount: @reservation.total_price, reservation_id: @reservation.id) %>
+  <% if session[:customer_id].nil? %>
+    <%= link_to "Continue", new_customer_path(reservation_id: @reservation.id) %>
   <% else %>
-    <%= link_to "Continue", new_user_registration_path %>
+    <%= link_to "Continue", customer_path(session[:customer_id]) %>
   <% end %>

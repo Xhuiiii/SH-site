@@ -29,6 +29,8 @@ module Booking
       #Get time
       if(time_id)
         time = Timeslot.find(time_id).time
+        checkinDate = check_in.to_date
+        check_in = DateTime.new(checkinDate.year, checkinDate.month, checkinDate.day, time.hour, time.min)
       end
 
       price = 0
@@ -36,6 +38,8 @@ module Booking
       #If only checkin
       if(!check_out && check_in)
         price = getPrice(service_type_id, check_in, time_id)
+        #set checkout to be checkin
+        check_out = check_in
       else
         till_day = (check_out.to_date - 1.days)
         (check_in.to_date..till_day).each do |d|

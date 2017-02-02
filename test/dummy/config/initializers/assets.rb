@@ -15,6 +15,9 @@ Rails.application.config.assets.precompile += %w( users/registrations.js )
 Rails.application.config.assets.precompile += %w( users/sessions.js )
 Rails.application.config.assets.precompile += %w( users/passwords.js )
 
+Rails.application.config.assets.precompile += %w( booking/admin/dashboard.js )
+
+
 # Add additional assets to the asset load path
 # Rails.application.config.assets.paths << Emoji.images_path
 
